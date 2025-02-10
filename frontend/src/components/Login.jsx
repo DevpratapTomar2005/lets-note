@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
-
+import { userLogin } from "../services/apiCalls"
 const Login = () => {
-  const [error,setError]=useState("");
+
   const [loading,setLoading]=useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,16 +17,34 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onsubmit = async (data) => {
-    setLoading(true);
-   await setTimeout(()=>{
-     console.log(data)
-     setLoading(false);
-      dispatch(isLoggedIn(true))
-      navigate("/")
-    },3000)
-   
-  } 
+ 
+  const loginUser=async(data)=>{
+      setLoading(true);
+     try {
+       const response=await userLogin({data});
+       setTimeout(() => {
+         if(response.status===201){
+           
+           console.log(response.data.message);
+           dispatch(isLoggedIn(true));
+           navigate("/");
+         }
+         if(response.status===200){
+           
+           console.log(response.data.message);
+         }
+         if(response.status===203){
+          
+           console.log(response.data.message);
+    }
+    setLoading(false);
+    //TODO: Add a toast message for the user  and server internal error
+       },800)
+     } catch (error) {
+      setLoading(false);
+      console.log(error);
+     }
+    }
   
   return (
     <div className="container border mx-auto w-3/4 my-3 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-white">
@@ -38,7 +56,7 @@ const Login = () => {
       </span>
       <div className="w-3/4 my-1">
         <form
-          onSubmit={handleSubmit(onsubmit)}
+          onSubmit={handleSubmit(loginUser)}
           className="flex flex-col "
         >
           <label htmlFor="email" className="text-purple-950 text-[15px]">
