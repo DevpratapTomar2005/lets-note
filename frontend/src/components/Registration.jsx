@@ -27,15 +27,16 @@ const Registration = () => {
           dispatch(isLoggedIn(true));
           navigate("/");
         }
-        if (response.status === 202) {
-          console.log(response.data.message);
-        }
+        
         setLoading(false);
         //TODO: Add a toast message for the user  and server internal error
       }, 800);
     } catch (error) {
+      if (error.status === 400) {
+        console.log(error.response.data.message);
+      }
       setLoading(false);
-      console.log(error);
+      
     }
   };
 

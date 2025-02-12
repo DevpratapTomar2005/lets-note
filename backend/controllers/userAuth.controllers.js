@@ -10,7 +10,7 @@ const userRegister=async (req,res)=>{
     
      if(userExists){
         
-     return res.status(202).json({message:"User already exists! Try to login"})
+     return res.status(400).json({message:"User already exists! Try to login"})
      }
      const hashedPassword= await bcrypt.hash(password,10)
      const user=await User.create({
@@ -38,10 +38,10 @@ const userLogin=async (req,res)=>{
     try {
         const user = await User.findOne({email:email}).select('-refreshToken -todos -notes -createdAt -updatedAt')
         if(!user){
-            return res.status(203).json({message:"User doesn't exist! Try to register"})
+            return res.status(400).json({message:"User doesn't exist! Try to register"})
         }
         if(!await bcrypt.compare(password,user.password)){
-            return res.status(200).json({message:"Invalid credentials"})
+            return res.status(400).json({message:"Invalid credentials"})
         }
         const accessToken=generateUserAccessToken(user)
         const refreshToken=generateUserRefreshToken(user)
