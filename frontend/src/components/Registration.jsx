@@ -23,7 +23,7 @@ const Registration = () => {
       const response = await userRegister({ data });
       setTimeout(() => {
         if (response.status === 201) {
-          console.log(response.data.message);
+         
           dispatch(isLoggedIn(true));
           navigate("/");
         }
@@ -33,6 +33,7 @@ const Registration = () => {
       }, 800);
     } catch (error) {
       if (error.status === 400) {
+        
         console.log(error.response.data.message);
       }
       setLoading(false);

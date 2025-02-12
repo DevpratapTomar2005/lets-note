@@ -6,7 +6,7 @@ const api = axios.create({
   });
 
 export const userRegister=({data})=>{
-    return api.post('/register',{
+    return api.post('/auth/register',{
         fullname:data.fullname,
         email:data.email,
         password:data.password
@@ -14,8 +14,16 @@ export const userRegister=({data})=>{
 }
 
 export const userLogin=({data})=>{
-    return api.post('/login',{
+    return api.post('/auth/login',{
         email:data.email,
         password:data.password
     })
+}
+
+export const userLogout=()=>{
+    return api.post('/auth/logout')
+}
+
+export const refreshUserToken=()=>{
+return api.post('/auth/refresh-token')
 }

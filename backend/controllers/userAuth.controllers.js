@@ -1,7 +1,7 @@
 import { generateUserAccessToken,generateUserRefreshToken } from "../utils/generateUserTokens.js"
 import User from '../models/userSchema.js'
 import bcrypt from 'bcryptjs'
-
+import jwt from 'jsonwebtoken'
 const userRegister=async (req,res)=>{
     const {fullname,email,password}=req.body
    
@@ -54,7 +54,44 @@ const userLogin=async (req,res)=>{
         return res.status(500).json({message:"Internal server error"})
     }
 }
+
+const userLogout=async (req,res)=>{
+   try {
+     await User.findByIdAndUpdate(req.user._id,{$set:{refreshToken:""}})
+     return res.status(201).clearCookie('current_session_token',{ httpOnly: true,secure: true,sameSite: 'Strict'}).clearCookie('max_session_token',{ httpOnly: true,secure: true,sameSite: 'Strict'}).json({message:"Logged out successfully!"})
+   } catch (error) {
+    return res.status(500).json({message:"Internal server error"})
+   }
+}
+
+const refreshUserToken=async (req,res)=>{
+    const refreshToken=req.cookies.max_session_token
+try {
+    
+        if(!refreshToken){    
+            return res.status(400).json({message:"Unauthorized user"})
+        }
+    
+        const decodedToken= jwt.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET)
+    
+        const user=await User.findById(decodedToken.id).select('-todos -notes -createdAt -updatedAt')
+    
+        if(!user){
+            return res.status(400).json({message:"Invalid Token"})
+        }
+        if(user.refreshToken!==refreshToken){
+            return res.status(400).json({message:"Invalid Token"})
+        }
+    
+        const accessToken=generateUserAccessToken(user)
+        return res.status(201).cookie('current_session_token',accessToken,{ httpOnly: true,secure: true,sameSite: 'Strict'}).json({message:"Token refreshed successfully!"})
+} catch (error) {
+    return res.status(500).json({message:"Internal server error"})
+}
+}
 export default {
     userRegister,
-    userLogin
+    userLogin,
+    userLogout,
+    refreshUserToken
 }
