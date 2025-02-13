@@ -27,3 +27,7 @@ export const userLogout=()=>{
 export const refreshUserToken=()=>{
 return api.post('/auth/refresh-token')
 }
+
+export const persistUserNextVisit=()=>{
+    return api.get('/auth/persist-user-next-visit')
+}

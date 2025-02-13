@@ -2,7 +2,7 @@ import signUpIllustration from "../assets/illustrations/signup_illustration.mp4"
 import loadingDot from "../assets/icons and logos/loading dots.gif";
 import google_logo from "../assets/icons and logos/google_logo.svg";
 import { useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
@@ -18,7 +18,11 @@ const Registration = () => {
   } = useForm();
 
   const registerUser = async (data) => {
-    setLoading(true);
+    if(data.password!=data.confpassword){
+      console.log("password does not match") //TODO: Add toast
+    }
+    else{
+      setLoading(true);
     try {
       const response = await userRegister({ data });
       setTimeout(() => {
@@ -39,6 +43,8 @@ const Registration = () => {
       setLoading(false);
       
     }
+    }
+    
   };
 
   return (

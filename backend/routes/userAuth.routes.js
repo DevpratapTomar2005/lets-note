@@ -8,4 +8,5 @@ router.post('/register',userAuthControllers.userRegister)
 router.post('/login',userAuthControllers.userLogin)
 router.post('/logout',checkAuth,userAuthControllers.userLogout)
 router.post('/refresh-token',userAuthControllers.refreshUserToken)
+router.get('/persist-user-next-visit',checkAuth,userAuthControllers.persistUserNextVisit)
 export default router
