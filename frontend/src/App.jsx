@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Layout from "./components/Layout.jsx";
 import Login from "./components/Login";
@@ -62,16 +62,24 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={!isLogged ? <Home /> : <UserHome />} />
-              {!isLogged ? (
-                <>
-                  <Route path="/features" element={<div>Features</div>} />
+              <Route path="/features" element={<div>Features</div>} />
                   <Route path="/about" element={<div>About Us</div>} />
                   <Route path="/contact" element={<div>Contact</div>} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/registration" element={<Registration />} />
+                 
+              {
+                (isLogged)?(
+                  <>
+                  //TODO: Want to add the above routes to navigate directly to the home if entered while logged in
+                  <Route path="/login" element={<Navigate to="/" />} />
+                  <Route path="/registration" element={<Navigate to="/" />} />
+                  </>
+                ):(<>
+                <Route path="/login" element={<Login />} />
+                <Route path="/registration" element={<Registration />} />
                 </>
-              ) : null}
-            </Route>
+                )
+              }
+              </Route>
           </Routes>
         </Router>
       )}
