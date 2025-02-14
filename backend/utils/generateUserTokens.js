@@ -4,12 +4,12 @@ dotenv.config()
 
 export const generateUserAccessToken=(user)=>{
     return jwt.sign({id:user._id},process.env.ACCESS_TOKEN_SECRET,{
-        expiresIn:'15m'
+        expiresIn:'1m'
     })
 }
 export const generateUserRefreshToken=(user)=>{
     return jwt.sign({id:user._id},process.env.REFRESH_TOKEN_SECRET,{
-        expiresIn:'1d'
+        expiresIn:'2m'
     })
 }
 

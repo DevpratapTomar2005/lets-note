@@ -1,13 +1,13 @@
 import React from 'react'
-import LandingNav from './LandingNav'
+import Navbar from './Navbar'
 import {Outlet } from 'react-router-dom'
-const LandingLayout = () => {
+const Layout = () => {
   return (
     <>
-    <LandingNav/>
+    <Navbar/>
     <Outlet/>
     </>
   )
 }
 
-export default LandingLayout
+export default Layout

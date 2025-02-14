@@ -1,8 +1,8 @@
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import {useEffect} from 'react'
-import LandingLayout from './components/LandingLayout'
-import MainLayout from './components/MainLayout.jsx'
+import {useEffect,useState} from 'react'
+import Layout from './components/Layout.jsx'
+
 import Login from './components/Login'
 import Registration from './components/Registration'
 import Home from './components/LandingHome'
@@ -13,7 +13,7 @@ import {persistUserNextVisit,refreshUserToken} from './services/apiCalls'
 
 function App() {
   const dispatch=useDispatch()
-  
+  const [loading,setLoading]=useState(true)
   useEffect(() => {
     const fetchUserStatus = async () => {
       try {
@@ -50,6 +50,11 @@ function App() {
           }
         
       }
+      finally{
+        setTimeout(()=>{
+          setLoading(false)
+        },1000)
+      }
     };
   
     fetchUserStatus();  
@@ -58,27 +63,34 @@ function App() {
 const isLogged = useSelector((state)=>state.login.value)
   return (
     <>
-     <Router>
+    {
+      loading?(
+        <div>Loading...</div>
+      ):
+      (
+      <Router>
       <Routes>
-        {
-          (!isLogged)?(
-            <Route path="/" element={<LandingLayout/>}>
-              <Route index element={<Home/>}/>
-              <Route path="/features" element={<div>Features</div>}/>
-              <Route path="/about" element={<div>About Us</div>}/>
-              <Route path="/contact" element={<div>Contact</div>}/>
-              <Route path="/login" element={<Login/>}/>
-              <Route path="/registration" element={<Registration/>}/>
-            </Route>
-          ):(
-            <Route path="/" element={<MainLayout/>}>
-              <Route index element={<UserHome/>}/>
-            </Route>
-          )
-          
-        }
+        <Route path="/" element={<Layout/>}>
+              <Route index element={(!isLogged)?(<Home/>):(<UserHome/>)}/>
+                {
+                  (!isLogged)?(
+                    <>
+                    <Route path="/features" element={<div>Features</div>}/>
+                    <Route path="/about" element={<div>About Us</div>}/>
+                    <Route path="/contact" element={<div>Contact</div>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/registration" element={<Registration/>}/>
+                    </>
+                  ):(
+                    null
+                  )
+                }
+          </Route>
       </Routes>
-     </Router>
+      </Router>
+      )
+    }
+     
     </>
   )
 }
