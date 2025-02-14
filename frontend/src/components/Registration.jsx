@@ -1,6 +1,8 @@
 import signUpIllustration from "../assets/illustrations/signup_illustration.mp4";
 import loadingDot from "../assets/icons and logos/loading dots.gif";
 import google_logo from "../assets/icons and logos/google_logo.svg";
+import openEye from "../assets/icons and logos/eye_open.svg"
+import closeEye from "../assets/icons and logos/eye_close.svg"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +11,7 @@ import { isLoggedIn } from "../slices/loginSlice";
 import { userRegister } from "../services/apiCalls";
 const Registration = () => {
   const [loading, setLoading] = useState(false);
+  const [show,setShow]=useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -97,11 +100,13 @@ const Registration = () => {
             <label htmlFor="password" className="text-purple-950 text-[15px]">
               Password:
             </label>
+            <span className="flex items-center gap-2">
             <input
-              type="password"
+              type={show?"text":"password"}
               id="password"
               name="password"
-              className="mb-2 outline-2 rounded outline-purple-500 py-2  px-2 text-purple-900 focus:outline-purple-800"
+              
+              className="mb-2 outline-2 rounded outline-purple-500 py-2  px-2 text-purple-900 focus:outline-purple-800 w-[90%]"
               {...register("password", {
                 required: true,
                 validate: {
@@ -109,9 +114,13 @@ const Registration = () => {
                     /^(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/.test(
                       value
                     ) || "Password must be valid",
-                },
-              })}
-            />
+                  },
+                })}
+                />
+                <span className="cursor-pointer mx-auto border-2 rounded border-purple-500 p-2 mb-2" onClick={()=>setShow(!show)}>
+                  <img src={show?closeEye:openEye} alt="password eye" />
+                </span>
+                </span>
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
@@ -122,7 +131,7 @@ const Registration = () => {
               Confirm Password:
             </label>
             <input
-              type="password"
+              type={show?"text":"password"}
               id="confpassword"
               name="confpassword"
               className="mb-2 outline-2 rounded outline-purple-500 py-2 px-2 text-purple-900 focus:outline-purple-800"

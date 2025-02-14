@@ -33,7 +33,7 @@ function App() {
         }
       } catch (error) {
         
-          if(error.response.status===401){
+          if(error.status===401){
             await refreshUserToken().then(()=>{
              
               fetchUserStatus()
@@ -44,7 +44,7 @@ function App() {
             })
           }
 
-          if (error.response.status === 500 || error.response.status === 400) {
+          if (error.status === 500 || error.status === 400) {
             console.log(error.response.data.message);  // TODO: Add toast
             dispatch(isLoggedIn(false));
           }
