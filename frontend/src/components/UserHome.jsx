@@ -1,43 +1,42 @@
 import { refreshUserToken, userLogout,persistUserNextVisit } from "../services/apiCalls"
 import {useNavigate} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import { isLoggedIn } from "../slices/loginSlice"
-
+import { toast } from "react-toastify"
 
 
 function UserHome() {
 const dispatch=useDispatch()
 const navigate=useNavigate()
 
-//   const logoutUser= async()=>{
-//    try {
-//      const response=await userLogout()
+  const logoutUser= async()=>{
+   try {
+     const response=await userLogout()
  
-//      if(response.status===201){
-    
-//      dispatch(isLoggedIn(false))
-//      navigate("/login")
-//    }
-//    } catch (error) {
-//     if(error.status===400){
-//      //TODO: Add a toast message for the user
-//       navigate("/login")
-//     }
-//     if(error.status===401){
+     if(response.status===201){
+    toast.success(`${Response.data.message}`);
+     dispatch(isLoggedIn(false))
+     navigate("/login")
+   }
+   } catch (error) {
+    if(error.status===400){
+     toast.error('User Logged Out!'); 
+     dispatch(isLoggedIn(false))
+      navigate("/login")
+    }
+    if(error.status===401){
       
-//       await refreshUserToken().then(()=>{
-//         logoutUser()
-//       }).catch(error=>{
-//         // TODO: Add a toast message for the user
-//         console.log(error.response.data.message)
-//       })
-//     }
-//     if(error.status===500){
-//       //TODO: Add a toast message for the user
-//       console.log(error.response.data.message)
-//    }
-// }
-// }
+      await refreshUserToken().then(()=>{
+        logoutUser()
+      }).catch(error=>{
+        toast.error(`${error.response.data.message}`); 
+      })
+    }
+    if(error.status===500){
+     toast.error(`${error.response.data.message}`) 
+   }
+}
+}
   return (
     <>
     <div>This is main home</div>

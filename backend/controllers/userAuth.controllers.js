@@ -82,7 +82,7 @@ const userLogin = async (req, res) => {
         secure: true,
         sameSite: "Strict",
       })
-      .json({ message: "User logined successfully!" });
+      .json({ message: "User logged in successfully!" });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
@@ -126,10 +126,10 @@ const refreshUserToken = async (req, res) => {
     );
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid Token" });
+      return res.status(400).json({ message: "Unauthorized user"  });
     }
     if (user.refreshToken !== refreshToken) {
-      return res.status(400).json({ message: "Invalid Token" });
+      return res.status(400).json({ message: "Unauthorized user"  });
     }
 
     const accessToken = generateUserAccessToken(user);

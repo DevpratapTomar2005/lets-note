@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
 import { userLogin } from "../services/apiCalls";
+import { toast } from "react-toastify";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
@@ -26,19 +27,19 @@ const Login = () => {
       const response = await userLogin({ data });
       setTimeout(() => {
         if (response.status === 201) {
-          console.log(response.data.message);
+          toast.success(`${response.data.message}`);
           dispatch(isLoggedIn(true));
           navigate("/");
         }
         setLoading(false);
-        //TODO: Add a toast message for the user  and server internal error
+       
       }, 800);
     } catch (error) {
       if (error.status === 400) {
-        console.log(error.response.data.message);
+        toast.error(`${error.response.data.message}`); 
       }
-      if (response.status === 500) {
-        console.log(error.response.data.message);
+      if (error.status === 500) {
+        toast.error(`${error.response.data.message}`); 
       }
       setLoading(false);
     }
@@ -63,7 +64,7 @@ const Login = () => {
               name="email"
               className="mb-2 outline-2 rounded outline-purple-500 py-2  px-2 text-purple-900 focus:outline-purple-800"
               {...register("email", {
-                required: true,
+                required: "true",
                 validate: {
                   matchPattern: (value) =>
                     /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
@@ -71,6 +72,7 @@ const Login = () => {
                     ) || "Email address must be a valid address",
                 },
               })}
+              required={true}
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -93,6 +95,7 @@ const Login = () => {
                       ) || "Password must be valid",
                   },
                 })}
+                required={true}
               />
               <span
                 className="cursor-pointer mx-auto border-2 rounded border-purple-500 p-2 mb-2"

@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
 import { userRegister } from "../services/apiCalls";
+import {toast} from 'react-toastify'
 const Registration = () => {
   const [loading, setLoading] = useState(false);
   const [show,setShow]=useState(false)
@@ -22,7 +23,7 @@ const Registration = () => {
 
   const registerUser = async (data) => {
     if(data.password!=data.confpassword){
-      console.log("password does not match") //TODO: Add toast
+      toast.error(`Invalid Credentials!`);
     }
     else{
       setLoading(true);
@@ -30,18 +31,18 @@ const Registration = () => {
       const response = await userRegister({ data });
       setTimeout(() => {
         if (response.status === 201) {
-         
+          toast.success(`${response.data.message}`);
           dispatch(isLoggedIn(true));
           navigate("/");
         }
         
         setLoading(false);
-        //TODO: Add a toast message for the user  and server internal error
+        
       }, 800);
     } catch (error) {
-      if (error.status === 400) {
+      if (error.status === 400 || error.status===500) {
         
-        console.log(error.response.data.message);
+        toast.error(`${error.response.data.message}`); 
       }
       setLoading(false);
       
@@ -72,6 +73,7 @@ const Registration = () => {
               name="fullname"
               className="mb-2 outline-2 rounded outline-purple-500 py-2 px-2 text-purple-900 focus:outline-purple-800"
               {...register("fullname", { required: true })}
+              required={true}
             />
             {errors.fullname && (
               <p className="text-red-500 text-sm">{errors.fullname.message}</p>
@@ -93,6 +95,7 @@ const Registration = () => {
                     ) || "Email address must be a valid address",
                 },
               })}
+              required={true}
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -116,6 +119,7 @@ const Registration = () => {
                     ) || "Password must be valid",
                   },
                 })}
+                required={true}
                 />
                 <span className="cursor-pointer mx-auto border-2 rounded border-purple-500 p-2 mb-2" onClick={()=>setShow(!show)}>
                   <img src={show?closeEye:openEye} alt="password eye" />
@@ -136,6 +140,7 @@ const Registration = () => {
               name="confpassword"
               className="mb-2 outline-2 rounded outline-purple-500 py-2 px-2 text-purple-900 focus:outline-purple-800"
               {...register("confpassword", { required: true })}
+              required={true}
             />
 
             <span className="text-sm">
