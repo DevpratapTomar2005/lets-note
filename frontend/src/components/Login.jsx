@@ -10,8 +10,9 @@ import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
 import { userLogin } from "../services/apiCalls";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 const Login = () => {
-  const [loading, setLoading] = useState(false);
+
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,29 +22,23 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const loginUser = async (data) => {
-    setLoading(true);
-    try {
-      const response = await userLogin({ data });
-      setTimeout(() => {
-        if (response.status === 201) {
-          toast.success(`${response.data.message}`);
-          dispatch(isLoggedIn(true));
-          navigate("/");
-        }
-        setLoading(false);
-       
-      }, 800);
-    } catch (error) {
-      if (error.status === 400) {
-        toast.error(`${error.response.data.message}`); 
-      }
-      if (error.status === 500) {
-        toast.error(`${error.response.data.message}`); 
-      }
-      setLoading(false);
+  const {mutate,isPending}=useMutation({
+    mutationFn:async(data)=>{
+      await userLogin({data})
+    },
+    onSuccess:(response)=>{
+      dispatch(isLoggedIn(true))
+      navigate('/')
+      toast.success(`${response.data.message}`)
+    },
+    onError:(error)=>{
+      toast.error(`${error.response.data.message}`)
     }
-  };
+  })
+
+  const loginUser=(data)=>{
+    mutate(data)
+  }
 
   return (
     <div className="container border mx-auto w-3/4 my-3 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-white">
@@ -117,7 +112,7 @@ const Login = () => {
               type="submit"
               className="bg-purple-700 py-1 text-[16px] my-2 w-1/2 flex items-center justify-center rounded-lg mx-auto mb-1 text-white hover:bg-purple-600"
             >
-              {loading ? (
+              {isPending ? (
                 <img src={loadingDot} alt="loading" className="h-10 w-10" />
               ) : (
                 <span className="py-2">Login</span>

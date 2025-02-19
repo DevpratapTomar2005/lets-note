@@ -45,8 +45,8 @@ const userRegister = async (req, res) => {
       })
       .json({ message: "User registered successfully!" });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Internal server error" });
+    
+    return res.status(500).json({ message: "Something went wrong!" });
   }
 };
 
@@ -84,7 +84,7 @@ const userLogin = async (req, res) => {
       })
       .json({ message: "User logged in successfully!" });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Something went wrong!" });
   }
 };
 
@@ -105,7 +105,7 @@ const userLogout = async (req, res) => {
       })
       .json({ message: "Logged out successfully!" });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Something went wrong!" });
   }
 };
 
@@ -156,7 +156,7 @@ const refreshUserToken = async (req, res) => {
         })
         .json({ message: "Token expired" });
     }
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Something went wrong!" });
   }
 };
 
@@ -223,7 +223,7 @@ const persistUserNextVisit = async (req, res) => {
         .json({ message: "User Logged Out" });
     }
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Something went wrong!" });
   }
 };
 export default {

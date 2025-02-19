@@ -3,40 +3,48 @@ import {useNavigate} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 import { isLoggedIn } from "../slices/loginSlice"
 import { toast } from "react-toastify"
-
+import { useMutation } from "@tanstack/react-query"
 
 function UserHome() {
 const dispatch=useDispatch()
 const navigate=useNavigate()
 
-  const logoutUser= async()=>{
-   try {
-     const response=await userLogout()
- 
-     if(response.status===201){
-    toast.success(`${Response.data.message}`);
-     dispatch(isLoggedIn(false))
-     navigate("/login")
-   }
-   } catch (error) {
-    if(error.status===400){
-     toast.error('User Logged Out!'); 
-     dispatch(isLoggedIn(false))
-      navigate("/login")
+ const {mutate}=useMutation({
+  mutationFn:async()=>{
+    await userLogout()
+  },
+  onSuccess:(response)=>{
+    dispatch(isLoggedIn(false))
+    navigate('/login')
+    toast.success(`${response.data.message}`)
+  },
+  onError:async (error)=>{
+    if(error.response.status==400 || error.response.status==500){
+      dispatch(isLoggedIn(false))
+      navigate('/login')
+      toast.error(`${error.response.data.message}`)
     }
-    if(error.status===401){
-      
-      await refreshUserToken().then(()=>{
-        logoutUser()
-      }).catch(error=>{
-        toast.error(`${error.response.data.message}`); 
-      })
+    if(error.response.status==401){
+      await refreshUserToken().then(
+        await userLogout().then(
+          dispatch(isLoggedIn(false)),
+          navigate('/login'),
+          toast.error(`Logged out successfully!`)
+        )
+      )
+      .catch(
+        dispatch(isLoggedIn(false)),
+        navigate('/login'),
+        toast.error(`Logged out successfully!`)
+      )
     }
-    if(error.status===500){
-     toast.error(`${error.response.data.message}`) 
-   }
-}
-}
+  }
+ })
+
+  const logoutUser=()=>{
+    mutate()
+  }
+
   return (
     <>
     <div>This is main home</div>

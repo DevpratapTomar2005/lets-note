@@ -20,7 +20,7 @@ const checkAuth=async(req,res,next)=>{
     if(error.name==="TokenExpiredError"){
         return res.status(401).json({message:"Token expired"})
     }
-    return res.status(500).json({message:"Internal server error"})
+    return res.status(500).json({message:"Something went wrong!"})
    }
 }
 
