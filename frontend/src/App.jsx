@@ -7,24 +7,52 @@ import Home from "./components/LandingHome";
 import UserHome from "./components/UserHome.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { isLoggedIn } from "./slices/loginSlice";
-import { persistUserNextVisit, refreshUserToken } from "./services/apiCalls";
-import { toast } from "react-toastify";
-import {QueryClient,QueryClientProvider} from '@tanstack/react-query'
+import { persistUserNextVisit } from "./services/apiCalls";
+import { useState,useEffect } from "react";
 
 
-const queryClient = new QueryClient()
+
 
 function App() {
   const dispatch = useDispatch();
+  const [loading,setIsLoading]=useState(true)
+  useEffect(() => {
+    const checkUserPersistence = async () => {
+      try {
+        
+        const response = await persistUserNextVisit();
+        
+        
+        if (response.status===200) {
+          dispatch(isLoggedIn(true))
+        } else {
+         
+          dispatch(isLoggedIn(false));
+        }
+      } catch (error) {
+      
+        
+        dispatch(isLoggedIn(false));
+      } finally {
+       setTimeout(()=>{
+        setIsLoading(false)
+       },700)
+        
+      }
+    };
+
+   
+    checkUserPersistence();
+  }, [])
+
  
   const isLogged = useSelector((state) => state.login.value);
   return (
   
-  <QueryClientProvider client={queryClient}>
-    
-    
-      
-        <Router>
+loading?(
+  <div>Loading...</div>
+):(
+  <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={!isLogged ? <Home /> : <UserHome />} />
@@ -47,9 +75,8 @@ function App() {
               </Route>
           </Routes>
         </Router>
-      
+)
     
-    </QueryClientProvider>
   );
 }
 
