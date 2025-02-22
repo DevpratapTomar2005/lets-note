@@ -24,12 +24,12 @@ const Login = () => {
 
   const {mutate,isPending}=useMutation({
     mutationFn:async(data)=>{
-      await userLogin({data})
+     return await userLogin({data})
     },
     onSuccess:(response)=>{
       dispatch(isLoggedIn(true))
-      navigate('/')
       toast.success(`${response.data.message}`)
+      navigate('/')
     },
     onError:(error)=>{
       toast.error(`${error.response.data.message}`)

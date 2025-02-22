@@ -1,17 +1,57 @@
-import { refreshUserToken, userLogout,persistUserNextVisit } from "../services/apiCalls"
+import { getUser, refreshUserToken, userLogout } from "../services/apiCalls"
 import {useNavigate} from 'react-router-dom'
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import { isLoggedIn } from "../slices/loginSlice"
+import {setUser} from '../slices/userSlice'
 import { toast } from "react-toastify"
 import { useMutation } from "@tanstack/react-query"
+import { useEffect } from "react"
 
 function UserHome() {
-const dispatch=useDispatch()
-const navigate=useNavigate()
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
+  const user=useSelector(state=>state.user)
+  
+ useEffect(()=>{
 
- const {mutate}=useMutation({
+  const gettingUser=async()=>{
+    try {
+      const response=await getUser()
+      if(response.status===200){
+       
+        dispatch(setUser(response.data.user))
+      }
+    } catch (error) {
+      if(error.response.status==401){
+        await refreshUserToken().then(
+          await getUser().then(secondRes=>{
+            dispatch(setUser(secondRes.data.user))
+          }
+          )
+            
+        )
+        .catch( error=>{
+          dispatch(isLoggedIn(false)),
+          navigate('/login'),
+          toast.error(`Logged out successfully!`)
+        }
+        )
+      }
+
+      if(error.response.status==400 || error.response.status==500){
+        dispatch(isLoggedIn(false))
+        navigate('/login')
+        toast.error(`${error.response.data.message}`)
+      }
+      
+    }
+  }
+  gettingUser()
+ },[])
+
+const {mutate}=useMutation({
   mutationFn:async()=>{
-    await userLogout()
+   return await userLogout()
   },
   onSuccess:(response)=>{
     dispatch(isLoggedIn(false))

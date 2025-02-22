@@ -24,7 +24,7 @@ const Registration = () => {
 
   const {mutate,isPending}=useMutation({
     mutationFn: async (data)=>{
-       await userRegister({data})
+      return await userRegister({data})
     },
     onSuccess:(response)=>{
       dispatch(isLoggedIn(true))

@@ -9,7 +9,7 @@ const checkAuth=async(req,res,next)=>{
      }
     const decodedToken= jwt.verify(accessToken,process.env.ACCESS_TOKEN_SECRET)
 
-     const user=await User.findById(decodedToken.id).select('-refreshToken -todos -notes -createdAt -updatedAt')
+     const user=await User.findById(decodedToken.id).select('-refreshToken -password -createdAt -updatedAt')
      if(!user){
          return res.status(400).json({message:"Unauthorized user"})
      }

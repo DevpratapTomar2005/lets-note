@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import dbConnect from './db/connectDb.js'
 import userAuthRoutes from './routes/userAuth.routes.js'
+import userRoutes from './routes/user.routes.js'
 import cookieParser from 'cookie-parser'
 dotenv.config()
 const app = express()
@@ -20,7 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 
 //All routes
 app.use('/api/auth',userAuthRoutes)
-
+app.use('/api/user',userRoutes)
 
 
 app.listen(port, () => {
