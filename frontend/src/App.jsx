@@ -7,7 +7,7 @@ import Home from "./components/LandingHome";
 import UserHome from "./components/UserHome.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { isLoggedIn } from "./slices/loginSlice";
-import { persistUserNextVisit } from "./services/apiCalls";
+import { persistUserNextVisit, refreshUserToken } from "./services/apiCalls";
 import { useState,useEffect } from "react";
 
 
@@ -25,13 +25,9 @@ function App() {
         
         if (response.status===200) {
           dispatch(isLoggedIn(true))
-        } else {
-         
-          dispatch(isLoggedIn(false));
         }
       } catch (error) {
-      
-        
+
         dispatch(isLoggedIn(false));
       } finally {
        setTimeout(()=>{
