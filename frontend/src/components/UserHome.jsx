@@ -6,7 +6,8 @@ import { setUser } from "../slices/userSlice";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
-import sortImg from "../assets/icons and logos/sort.svg";
+import LeftSideBar from "../components/LeftSideBar";
+import Dashboard  from "../components/Dashboard";
 function UserHome() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -84,25 +85,8 @@ function UserHome() {
   return (
     <>
       <div className="flex">
-        <div className="left border-1 border-red-400 w-20 fixed min-h-screen top-[2.74rem]"></div>
-        <div className="right min-h-screen relative w-full top-[2.74rem] ml-20">
-          <div className="upcoming-tasks my-7 mx-20">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 font-roboto">Upcoming Tasks</span>
-              <span className="hover:bg-gray-100 p-2 rounded-3xl">
-                <img src={sortImg} alt="sort" />
-              </span>
-            </div>
-          </div>
-          <div className="recent-notes my-7 mx-20">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 font-roboto">Recent Notes</span>
-              <span className="hover:bg-gray-100 p-2 rounded-3xl">
-                <img src={sortImg} alt="sort" />
-              </span>
-            </div>
-          </div>
-        </div>
+        <LeftSideBar/>
+        <Dashboard/>
       </div>
       {/* <button className="text-white bg-blue-500 p-2" onClick={()=>logoutUser()}>Logout</button> */}
     </>

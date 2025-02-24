@@ -25,7 +25,7 @@ const Navbar = () => {
           </>
         ):(
           <>
-          <div><NavLink to="/">LOGO</NavLink></div>
+          <div className="mx-10"><NavLink to="/">LOGO</NavLink></div>
 
           <ul className="flex gap-10">
           <li className="px-1 mx-1 hover:font-medium"><NavLink to="/">Home</NavLink></li>

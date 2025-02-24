@@ -9,3 +9,6 @@ body {
 .font-roboto {
   font-family: 'Roboto', sans-serif;
 }
+.shadow-right{
+  box-shadow: 0px 1px 3px  rgb(94, 94, 94);
+}
