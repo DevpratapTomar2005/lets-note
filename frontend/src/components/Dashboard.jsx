@@ -1,12 +1,12 @@
 import sortImg from "../assets/icons and logos/sort.svg";
 import { useSelector } from "react-redux";
 import CreateModal from "./CreateModal";
-import React from "react";
+
 
 const Dashboard = () => {
   const showCreateModal = useSelector(state => state.showCreateModal.value)
   return (
-    <div className="right h-[calc(90vh+16px)] relative w-full top-[2.74rem] ml-20">
+    <div className="h-[calc(90vh+16px)] relative w-full top-[2.74rem] ml-20">
       {showCreateModal && <CreateModal />}
       <div className="upcoming-tasks my-7 mx-22">
         <div className="flex justify-between items-center">

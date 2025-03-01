@@ -1,4 +1,4 @@
-
+import User from '../models/userSchema.js'
 
 const getUser=(req,res)=>{
     try {
@@ -9,6 +9,25 @@ const getUser=(req,res)=>{
     }
 }
 
+const createTodo=async(req,res)=>{
+    const {todoData}=req.body.todoData
+    
+   try {
+     const user=await User.findById(req.user.id)
+     if(!user){
+         return res.status(400).json({message:'User not found!'})
+     }
+     const newTodo={...todoData,completed:false}
+    user.todos.push(newTodo)
+    await user.save({validateBeforeSave:false})
+     return res.status(201).json({message:'Todo Created Successfully!',todo:newTodo})
+   } catch (error) {
+    return res.status(500).json({message:'Something went wrong!'})
+   }
+
+}
+
 export default {
-    getUser
+    getUser,
+    createTodo
 }

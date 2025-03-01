@@ -35,3 +35,10 @@ export const persistUserNextVisit=()=>{
 export const getUser=()=>{
     return api.get('/user/get-user')
 }
+
+export const createTodo=({data})=>{
+    return api.post('/user/create-todo',
+    {
+        todoData:data
+    })
+}

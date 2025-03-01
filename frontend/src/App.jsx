@@ -9,9 +9,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { isLoggedIn } from "./slices/loginSlice";
 import { persistUserNextVisit, refreshUserToken } from "./services/apiCalls";
 import { useState,useEffect } from "react";
-
-
-
+import NotesPage from "./components/NotesPage.jsx";
+import TodosPage from "./components/TodosPage.jsx";
+import Settings from "./components/Settings.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -52,19 +52,28 @@ loading?(
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={!isLogged ? <Home /> : <UserHome />} />
-              <Route path="/features" element={<div>Features</div>} />
-                  <Route path="/about" element={<div>About Us</div>} />
-                  <Route path="/contact" element={<div>Contact</div>} /> 
               {
                 (isLogged)?(
                   <>
                   //TODO: Want to add the above routes to navigate directly to the home if entered while logged in
                   <Route path="/login" element={<Navigate to="/" />} />
                   <Route path="/registration" element={<Navigate to="/" />} />
+                  <Route path="/notes" element={<NotesPage/>} />
+                  <Route path="/todos" element={<TodosPage/>} />
+                  <Route path="/features" element={<Navigate to="/" />} />
+                  <Route path="/about" element={<Navigate to="/" />} />
+                  <Route path="/contact" element={<Navigate to="/" />} /> 
+                  <Route path="/settings" element={<Settings/>} /> 
                   </>
                 ):(<>
                 <Route path="/login" element={<Login />} />
                 <Route path="/registration" element={<Registration />} />
+                <Route path="/notes" element={<Navigate to="/" />} />
+                <Route path="/todos" element={<Navigate to="/" />} />
+                <Route path="/settings" element={<Navigate to="/" />} />
+                <Route path="/features" element={<div>Features</div>} />
+                <Route path="/about" element={<div>About Us</div>} />
+                <Route path="/contact" element={<div>Contact</div>} /> 
                 </>
                 )
               }

@@ -1,8 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+
 const initialState={
     fullname:'',
-    email:''
+    email:'',
+    todos:[],
+    notes:[],
 }
 
 const userSlice=createSlice({
@@ -13,9 +16,17 @@ const userSlice=createSlice({
         setUser:(state,action)=>{
             state.fullname=action.payload.fullname
             state.email=action.payload.email
+            state.todos=action.payload.todos
+            state.notes=action.payload.notes
+        },
+        setTodos:(state,action)=>{
+            state.todos.push(action.payload)
+        },
+        setNotes:(state,action)=>{
+            state.notes.push(action.payload)
         }
     }
 })
 
-export const {setUser}=userSlice.actions
+export const {setUser,setTodos,setNotes}=userSlice.actions
 export default userSlice.reducer

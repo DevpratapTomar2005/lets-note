@@ -9,6 +9,14 @@ const todoSchema = new mongoose.Schema({
       type: Date,
       required: false,
     },
+    notifyMe: {
+      type: Boolean,
+      default: false,
+    },
+    notificationTime: {
+      type: String,
+      required: false,
+    },
     completed: {
       type: Boolean,
       default: false,
