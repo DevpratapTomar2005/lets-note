@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setShowCreateModal } from "../slices/showCreateModal";
 import { useMutation } from "@tanstack/react-query";
@@ -9,9 +9,10 @@ import { isLoggedIn } from "../slices/loginSlice";
 import { setTodos,setNotes } from "../slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { requestFCMToken } from "../services/firebase";
 const CreateModal = () => {
     const navigate = useNavigate();
-    
+    const [fcmToken, setFcmToken] = useState("");
   const [task, setTask] = useState("todo");
 
   const [todoTask, setTodoTask] = useState("");
@@ -24,6 +25,15 @@ const CreateModal = () => {
 
   const [notificationTime, setNotificationTime] = useState("");
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getFcmToken = async () => {
+      const token = await requestFCMToken();
+      setFcmToken(token);
+    };
+    getFcmToken();
+    console.log(fcmToken);
+  })
 
     const {mutate,isPending} = useMutation({
         mutationFn:async(data)=>{
