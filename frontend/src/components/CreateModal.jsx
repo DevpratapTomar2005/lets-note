@@ -30,6 +30,7 @@ const CreateModal = () => {
     const getFcmToken = async () => {
       const token = await requestFCMToken();
       setFcmToken(token);
+      
     };
     getFcmToken();
     console.log(fcmToken);
@@ -63,13 +64,19 @@ const CreateModal = () => {
 
     const createHandler=()=>{
         if(task==='todo'){
+
+         
             let todoData={
-                title:todoTask,
-                dueDate:dueDate,
-                notifyMe:wantNotification,
-                notificationTime:notificationTime
+              title:todoTask,
+              dueDate:dueDate,
+              notifyMe:wantNotification,
+              notificationTime:notificationTime,
+              deviceToken:fcmToken || ""
             }
-            mutate({todoData})
+          mutate({todoData})
+          
+         
+             
     }
     
 }
