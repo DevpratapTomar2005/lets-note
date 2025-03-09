@@ -1,6 +1,6 @@
 import React from "react";
-import { useState,useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch,useSelector } from "react-redux";
 import { setShowCreateModal } from "../slices/showCreateModal";
 import { useMutation } from "@tanstack/react-query";
 import { createTodo } from "../services/apiCalls";
@@ -9,10 +9,10 @@ import { isLoggedIn } from "../slices/loginSlice";
 import { setTodos,setNotes } from "../slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { requestFCMToken } from "../services/firebase";
+
 const CreateModal = () => {
     const navigate = useNavigate();
-    const [fcmToken, setFcmToken] = useState("");
+   
   const [task, setTask] = useState("todo");
 
   const [todoTask, setTodoTask] = useState("");
@@ -26,16 +26,8 @@ const CreateModal = () => {
   const [notificationTime, setNotificationTime] = useState("");
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const getFcmToken = async () => {
-      const token = await requestFCMToken();
-      setFcmToken(token);
-      
-    };
-    getFcmToken();
-    console.log(fcmToken);
-  })
-
+ 
+ 
     const {mutate,isPending} = useMutation({
         mutationFn:async(data)=>{
             return await createTodo({data})
@@ -43,6 +35,10 @@ const CreateModal = () => {
         onSuccess:(response)=>{
             dispatch(setTodos(response.data.todo))
             toast.success(`${response.data.message}`)
+            setTimeout(()=>{
+              dispatch(setShowCreateModal(false))
+            },1800)
+            
         },
         onError:async(error)=>{
             if(error.status===401){
@@ -61,11 +57,9 @@ const CreateModal = () => {
             toast.error(`${error.response.data.message}`)
         }
     })
-
+    const fcmToken=useSelector(state=>state.user.fcmToken)
     const createHandler=()=>{
         if(task==='todo'){
-
-         
             let todoData={
               title:todoTask,
               dueDate:dueDate,
@@ -74,9 +68,7 @@ const CreateModal = () => {
               deviceToken:fcmToken || ""
             }
           mutate({todoData})
-          
-         
-             
+               
     }
     
 }
@@ -157,6 +149,7 @@ const CreateModal = () => {
                   type="time"
                   name="notificationTime"
                   id="notificationTime"
+                
                   className="outline-1 p-1 rounded outline-black focus:outline-black"
                   onChange={(e) => {
                     setNotificationTime(e.target.value);

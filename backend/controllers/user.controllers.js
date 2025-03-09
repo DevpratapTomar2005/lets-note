@@ -1,5 +1,6 @@
 import User from '../models/userSchema.js'
 import sendNotifications from '../utils/notificationService.js'
+import schedule from 'node-schedule'
 const getUser=(req,res)=>{
     try {
         return res.status(200).json({user:req.user,message:'User fetched successfuly!'})
@@ -28,9 +29,14 @@ const createTodo=async(req,res)=>{
     await user.save({validateBeforeSave:false})
 
     if(todoData.notifyMe && todoData.deviceToken){
+        const scheduledDate = new Date(`${todoData.dueDate} ${todoData.notificationTime}`)
         try {
-        const response=await sendNotifications(todoData.deviceToken,todoData.title,'You have a task due!!')
-            console.log(response)
+            const job=schedule.scheduleJob(scheduledDate,async()=>{
+                
+              const response=  await sendNotifications(todoData.deviceToken,todoData.title,'You have a task due!!')
+                
+            });
+            
         } catch (error) {
             return res.status(500).json({message:'Notification not sent!'})
         }

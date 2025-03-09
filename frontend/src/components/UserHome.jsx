@@ -1,25 +1,30 @@
 import { getUser, refreshUserToken, userLogout } from "../services/apiCalls";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
 import { setUser } from "../slices/userSlice";
-
+import { setFCMToken } from "../slices/userSlice";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import LeftSideBar from "../components/LeftSideBar";
 import Dashboard  from "../components/Dashboard";
+import { requestFCMToken } from "../services/firebase";
 function UserHome() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
+  
 
+  
   useEffect(() => {
     const gettingUser = async () => {
       try {
         const response = await getUser();
         if (response.status === 200) {
           dispatch(setUser(response.data.user));
+          const token = await requestFCMToken();
+
+          dispatch(setFCMToken(token))
         }
       } catch (error) {
         if (error.response.status == 401) {
@@ -45,6 +50,8 @@ function UserHome() {
     };
     gettingUser();
   }, []);
+
+  
 
   const { mutate } = useMutation({
     mutationFn: async () => {

@@ -6,6 +6,7 @@ const initialState={
     email:'',
     todos:[],
     notes:[],
+    fcmToken:''
 }
 
 const userSlice=createSlice({
@@ -24,9 +25,12 @@ const userSlice=createSlice({
         },
         setNotes:(state,action)=>{
             state.notes.push(action.payload)
+        },
+        setFCMToken:(state,action)=>{
+            state.fcmToken=action.payload
         }
     }
 })
 
-export const {setUser,setTodos,setNotes}=userSlice.actions
+export const {setUser,setTodos,setNotes,setFCMToken}=userSlice.actions
 export default userSlice.reducer
