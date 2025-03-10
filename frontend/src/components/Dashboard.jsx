@@ -1,10 +1,22 @@
 import sortImg from "../assets/icons and logos/sort.svg";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import CreateModal from "./CreateModal";
-
-
+import { setFCMToken } from "../slices/userSlice";
+import { requestFCMToken } from "../services/firebase";
+import { useEffect } from "react";
 const Dashboard = () => {
   const showCreateModal = useSelector(state => state.showCreateModal.value)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    const generatingFcmToken=async()=>{
+
+      const token = await requestFCMToken();
+  
+      dispatch(setFCMToken(token))
+      
+    }
+    generatingFcmToken()
+  })
   return (
     <div className="h-[calc(90vh+16px)] relative w-full top-[2.74rem] ml-20">
       {showCreateModal && <CreateModal />}

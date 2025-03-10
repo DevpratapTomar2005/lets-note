@@ -32,9 +32,7 @@ export const persistUserNextVisit=()=>{
     return api.get('/auth/persist-user-next-visit')
 }
 
-export const getUser=()=>{
-    return api.get('/user/get-user')
-}
+
 
 export const createTodo=({data})=>{
     return api.post('/user/create-todo',

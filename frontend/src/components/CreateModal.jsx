@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 
 const CreateModal = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
    
   const [task, setTask] = useState("todo");
 
@@ -24,9 +25,8 @@ const CreateModal = () => {
   const [wantNotification, setWantNotification] = useState(true);
 
   const [notificationTime, setNotificationTime] = useState("");
-  const dispatch = useDispatch();
 
- 
+  const fcmToken=useSelector(state=>state.user.fcmToken)
  
     const {mutate,isPending} = useMutation({
         mutationFn:async(data)=>{
@@ -57,7 +57,8 @@ const CreateModal = () => {
             toast.error(`${error.response.data.message}`)
         }
     })
-    const fcmToken=useSelector(state=>state.user.fcmToken)
+   
+    
     const createHandler=()=>{
         if(task==='todo'){
             let todoData={

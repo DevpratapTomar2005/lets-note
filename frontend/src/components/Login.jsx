@@ -11,6 +11,7 @@ import { isLoggedIn } from "../slices/loginSlice";
 import { userLogin } from "../services/apiCalls";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
+import { setUser } from "../slices/userSlice";
 const Login = () => {
 
   const [show, setShow] = useState(false);
@@ -28,8 +29,10 @@ const Login = () => {
     },
     onSuccess:(response)=>{
       dispatch(isLoggedIn(true))
-      toast.success(`${response.data.message}`)
+      dispatch(setUser(response.data.user))
+      
       navigate('/')
+     
     },
     onError:(error)=>{
       toast.error(`${error.response.data.message}`)

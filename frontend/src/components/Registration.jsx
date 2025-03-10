@@ -11,6 +11,7 @@ import { isLoggedIn } from "../slices/loginSlice";
 import { userRegister } from "../services/apiCalls";
 import {toast} from 'react-toastify'
 import { useMutation } from "@tanstack/react-query";
+import { setUser } from "../slices/userSlice";
 const Registration = () => {
  
   const [show,setShow]=useState(false)
@@ -28,8 +29,10 @@ const Registration = () => {
     },
     onSuccess:(response)=>{
       dispatch(isLoggedIn(true))
+      dispatch(setUser(response.data.user))
+     
       navigate('/')
-      toast.success(`${response.data.message}`)
+     
     },
     onError:(error)=>{
       toast.error(`${error.response.data.message}`)

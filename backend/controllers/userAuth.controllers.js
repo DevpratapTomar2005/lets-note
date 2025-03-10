@@ -43,7 +43,7 @@ const userRegister = async (req, res) => {
         secure: true,
         sameSite: "Strict",
       })
-      .json({ message: "User registered successfully!" });
+      .json({ message: "User registered successfully!",user:{fullname:user.fullname,email:user.email} });
   } catch (error) {
     
     return res.status(500).json({ message: "Something went wrong!" });
@@ -55,7 +55,7 @@ const userLogin = async (req, res) => {
 
   try {
     const user = await User.findOne({ email: email }).select(
-      "-refreshToken -todos -notes -createdAt -updatedAt"
+      "-refreshToken -createdAt -updatedAt"
     );
     if (!user) {
       return res
@@ -82,7 +82,7 @@ const userLogin = async (req, res) => {
         secure: true,
         sameSite: "Strict",
       })
-      .json({ message: "User logged in successfully!" });
+      .json({ message: "User logged in successfully!",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes} });
   } catch (error) {
     return res.status(500).json({ message: "Something went wrong!" });
   }
@@ -189,21 +189,7 @@ const persistUserNextVisit = async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    if (decodedAccessToken.id !== decodedRefreshToken.id) {
-      return res
-        .status(400)
-        .clearCookie("current_session_token", {
-          httpOnly: true,
-          secure: true,
-          sameSite: "Strict",
-        })
-        .clearCookie("max_session_token", {
-          httpOnly: true,
-          secure: true,
-          sameSite: "Strict",
-        })
-        .json({ message: "User Logged Out" });
-    }
+    
 
     if (decodedRefreshToken && decodedAccessToken) {
       return res.status(200).json({ message: "User Logged In" });

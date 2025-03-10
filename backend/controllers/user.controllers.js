@@ -1,14 +1,7 @@
 import User from '../models/userSchema.js'
 import sendNotifications from '../utils/notificationService.js'
 import schedule from 'node-schedule'
-const getUser=(req,res)=>{
-    try {
-        return res.status(200).json({user:req.user,message:'User fetched successfuly!'})
-        
-    } catch (error) {
-        return res.status(500).json({message:'Something went wrong!'})
-    }
-}
+
 
 const createTodo=async(req,res)=>{
     const {todoData}=req.body.todoData
@@ -50,6 +43,6 @@ const createTodo=async(req,res)=>{
 }
 
 export default {
-    getUser,
+    
     createTodo
 }
