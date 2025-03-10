@@ -12,6 +12,7 @@ import { useState,useEffect } from "react";
 import NotesPage from "./components/NotesPage.jsx";
 import TodosPage from "./components/TodosPage.jsx";
 import Settings from "./components/Settings.jsx";
+import { setUser } from "./slices/userSlice.js";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ function App() {
         
         if (response.status===200) {
           dispatch(isLoggedIn(true))
+          dispatch(setUser(response.data.user))
         }
       } catch (error) {
 

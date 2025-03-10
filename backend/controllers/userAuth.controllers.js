@@ -192,7 +192,8 @@ const persistUserNextVisit = async (req, res) => {
     
 
     if (decodedRefreshToken && decodedAccessToken) {
-      return res.status(200).json({ message: "User Logged In" });
+      const user=await User.findById(decodedAccessToken.id).select('-refreshToken -password -createdAt -updatedAt')
+      return res.status(200).json({ message: "User Logged In",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes} });
     } else {
       return res
         .status(400)

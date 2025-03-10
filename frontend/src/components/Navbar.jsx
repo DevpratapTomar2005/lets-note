@@ -3,6 +3,8 @@ import {useSelector} from "react-redux"
 import userImg from '../assets/images/userimg.svg'
 const Navbar = () => {
   const isLogged=useSelector((state)=>state.login.value)
+  const userFullName=useSelector(state=>state.user.fullname)
+  
   return (
     <>
     <nav className={(!isLogged)?("w-full flex bg-purple-600 text-white justify-between p-4"):("w-full flex bg-purple-600 text-white justify-between p-1 items-center fixed z-10")}>
@@ -35,7 +37,7 @@ const Navbar = () => {
 
           <div className="flex gap-1 bg-purple-800 rounded-md p-1 items-center cursor-pointer hover:bg-purple-400">
             <div className="font-medium text-[13px]">
-              Devpratap Tomar
+              {userFullName}
             </div>
             <div className="bg-gray-100 p-1 rounded">
               <img src={userImg} alt="user profile"/>
