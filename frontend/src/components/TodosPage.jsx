@@ -13,8 +13,9 @@ const TodosPage = () => {
       {showCreateModal && <CreateModal />}
       <div className=" flex flex-wrap gap-3 mx-4 my-7">
         {
-          todos.map((todo)=>{
-           return <Todo key={todo._id} todo={todo}/>
+         
+          todos.map((todo,index)=>{
+           return <Todo key={index} todo={todo}/>
           })
         }
         

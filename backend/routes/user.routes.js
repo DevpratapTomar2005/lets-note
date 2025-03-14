@@ -5,4 +5,5 @@ const router=express.Router()
 
 
 router.post('/create-todo',checkAuth,userControllers.createTodo)
+router.post('/delete-todo',checkAuth,userControllers.deleteTodo)
 export default router

@@ -20,7 +20,7 @@ const createTodo=async(req,res)=>{
     }
     user.todos.push(newTodo)
     await user.save({validateBeforeSave:false})
-
+    const savedTodo = user.todos[user.todos.length - 1];
     if(todoData.notifyMe && todoData.deviceToken){
         const scheduledDate = new Date(`${todoData.dueDate} ${todoData.notificationTime}`)
         try {
@@ -35,14 +35,32 @@ const createTodo=async(req,res)=>{
         }
     }
 
-     return res.status(201).json({message:'Todo Created Successfully!',todo:newTodo})
+     return res.status(201).json({message:'Todo Created Successfully!',todo:savedTodo})
    } catch (error) {
     return res.status(500).json({message:'Something went wrong!'})
    }
 
 }
 
+const deleteTodo=async(req,res)=>{
+    const id=req.body.id
+    
+   try {
+     const user=await User.findById(req.user.id).select('-notes -refreshToken -createdAt -updatedAt')
+     if(!user){
+         return res.status(400).json({message:'User not found!'})
+     }
+     
+     const unDeletedTodos=user.todos.filter(todo=>todo._id.toString()!==id)
+     user.todos=unDeletedTodos
+     await user.save({validateBeforeSave:false})
+     return res.status(201).json({message:'Todo Deleted Successfully!',id})
+   } catch (error) {
+    return res.status(500).json({message:'Something went wrong!'})
+   }
+}
 export default {
     
-    createTodo
+    createTodo,
+    deleteTodo
 }

@@ -40,3 +40,9 @@ export const createTodo=({data})=>{
         todoData:data
     })
 }
+
+export const deleteTodo=(id)=>{
+    return api.post(`/user/delete-todo`,{
+        id:id
+    })
+}

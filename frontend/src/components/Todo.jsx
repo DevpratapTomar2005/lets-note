@@ -1,10 +1,60 @@
-import deleteTodo from '../assets/icons and logos/delete.svg'
+import deleteTodoImg from '../assets/icons and logos/delete.svg'
 import clock from '../assets/icons and logos/clock.svg'
 import { useState } from 'react'
+import {useDispatch} from 'react-redux'
+import {deleteStoreTodo} from '../slices/userSlice'
+import { deleteTodo } from '../services/apiCalls'
+import {useMutation} from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import {useNavigate} from 'react-router-dom'
 const Todo = ({todo}) => {
 const [markComplete,setMarkComplete]=useState(false)
+
+const dispatch=useDispatch()
+const navigate=useNavigate()
  const onCheckHandler=()=>{
  setMarkComplete(!markComplete)
+ }
+
+ const {mutate}=useMutation({
+  mutationFn: async(id)=>{
+    
+    return await deleteTodo(id)
+  },
+  onSuccess:(response)=>{
+    
+    dispatch(deleteStoreTodo(response.data.id))
+   
+    
+  },
+  onError:async(error)=>{
+    if (error.response.status == 401) {
+            await refreshUserToken()
+              .then(
+                await deleteTodo(todo._id).then((response)=>{
+                  dispatch(deleteStoreTodo(response.todo.id))
+                  
+                
+                }   
+                ).catch(
+                  (error)=>{
+                    toast.error('Error in deleting todo!')
+                  }
+                )
+              )
+              .catch(
+                dispatch(isLoggedIn(false)),
+                navigate("/login"),
+                toast.error(`Logged out successfully!`)
+              );
+          }
+  }
+ })
+
+ 
+ const deleteTodoHandler=(todoid)=>{
+  
+  mutate(todoid)
  }
  
   return (
@@ -16,8 +66,8 @@ const [markComplete,setMarkComplete]=useState(false)
         <input type="checkbox" name="taskCheck" id="taskCheck" onChange={()=>onCheckHandler()} className="accent-purple-500 w-[18px]" />
         <span className="text-purple-600"><h2 className={markComplete?'line-through': null}>{todo.title}</h2></span>
         </div>
-        <div className='p-1 hover:bg-gray-100 rounded-full'>
-          <img src={deleteTodo} className='w-[20px] opacity-[0.8]' alt="verticle dots" />
+        <div className='p-1 hover:bg-gray-100 rounded-full' onClick={()=>deleteTodoHandler(todo._id)}>
+          <img src={deleteTodoImg} className='w-[20px] opacity-[0.8]' alt="verticle dots" />
         </div>
       </div>
       <div className='mt-3 flex justify-between'>

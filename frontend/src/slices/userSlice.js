@@ -21,16 +21,19 @@ const userSlice=createSlice({
             state.notes=action.payload.notes
         },
         setTodos:(state,action)=>{
-            state.todos.push(action.payload)
+          state.todos=[...state.todos,action.payload]
         },
         setNotes:(state,action)=>{
             state.notes.push(action.payload)
         },
         setFCMToken:(state,action)=>{
             state.fcmToken=action.payload
+        },
+        deleteStoreTodo:(state,action)=>{
+            state.todos=state.todos.filter((todo)=>todo._id!==action.payload)
         }
     }
 })
 
-export const {setUser,setTodos,setNotes,setFCMToken}=userSlice.actions
+export const {setUser,setTodos,setNotes,setFCMToken,deleteStoreTodo}=userSlice.actions
 export default userSlice.reducer
