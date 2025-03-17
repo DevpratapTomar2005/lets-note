@@ -14,12 +14,12 @@ const LeftSideBar = () => {
       <div className="create bg-blue-500 p-3 rounded-lg hover:bg-blue-400" onClick={()=>dispatch(setShowCreateModal(true))}>
       <img className="m-auto w-[26px]" src={Plus} alt="create" />
       </div>
-      <div className="todos transition-transform duration-350 ease-in-out hover:rotate-x-[18deg] hover:rotate-z-[-26deg] hover:rotate-y-[28deg] p-2 rounded-lg">
+      <div className="todos transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
         <Link to={'/todos'}>
       <img className="m-auto w-[28px]" src={Todo} alt="Todos" />
         </Link>
       </div>
-      <div className="notes transition-transform duration-350 ease-in-out hover:rotate-x-[18deg] hover:rotate-z-[-26deg] hover:rotate-y-[28deg] p-2 rounded-lg">
+      <div className="notes transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
       <Link to={'/notes'}>
       <img className="m-auto w-[28px]" src={Note} alt="Notes" />
       </Link>
