@@ -26,25 +26,23 @@ function UserHome() {
       toast.success(`${response.data.message}`);
     },
     onError: async (error) => {
-      if (error.response.status == 400 || error.response.status == 500) {
+      
+      if (error.response.status == 401) {
+        try {
+          await refreshUserToken();
+          await userLogout();
+          dispatch(isLoggedIn(false));
+          navigate("/login");
+          toast.error(`Logged out successfully!`);
+        } catch (error) {
+          dispatch(isLoggedIn(false));
+          navigate("/login");
+          toast.error(`Error logging out: ${error.message}`);
+        }
+      } else {
         dispatch(isLoggedIn(false));
         navigate("/login");
         toast.error(`${error.response.data.message}`);
-      }
-      if (error.response.status == 401) {
-        await refreshUserToken()
-          .then(
-            await userLogout().then(
-              dispatch(isLoggedIn(false)),
-              navigate("/login"),
-              toast.error(`Logged out successfully!`)
-            )
-          )
-          .catch(
-            dispatch(isLoggedIn(false)),
-            navigate("/login"),
-            toast.error(`Logged out successfully!`)
-          );
       }
     },
   });
