@@ -46,3 +46,9 @@ export const deleteTodo=(id)=>{
         id:id
     })
 }
+export const taskCompleted=({id,completed})=>{
+    return api.post(`/user/task-completed`,{
+        id,
+        completed
+    })
+}

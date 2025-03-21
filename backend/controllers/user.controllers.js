@@ -59,8 +59,32 @@ const deleteTodo=async(req,res)=>{
     return res.status(500).json({message:'Something went wrong!'})
    }
 }
+
+
+const taskCompleted=async(req,res)=>{
+    const {id,completed}=req.body
+   
+   try {
+     const user=await User.findById(req.user.id).select('-notes -refreshToken -createdAt -updatedAt')
+     if(!user){
+         return res.status(400).json({message:'User not found!'})
+     }
+     
+     if(completed===true){
+         user.todos.filter(todo=>todo._id.toString()===id)[0].completed=true
+     }
+     else{
+         user.todos.filter(todo=>todo._id.toString()===id)[0].completed=false
+     }
+     await user.save({validateBeforeSave:false})
+     return res.status(201).json({message:'Todo Updated Successfully!',id,completed})
+   } catch (error) {
+    return res.status(500).json({message:'Something went wrong!'})
+   }
+}
 export default {
     
     createTodo,
-    deleteTodo
+    deleteTodo,
+    taskCompleted
 }

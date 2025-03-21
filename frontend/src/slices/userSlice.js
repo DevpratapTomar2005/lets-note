@@ -31,9 +31,12 @@ const userSlice=createSlice({
         },
         deleteStoreTodo:(state,action)=>{
             state.todos=state.todos.filter((todo)=>todo._id!==action.payload)
+        },
+        setTodoCompletion:(state,action)=>{
+            state.todos=state.todos.map((todo)=>todo._id===action.payload.id?{...todo,completed:action.payload.completed}:todo)
         }
     }
 })
 
-export const {setUser,setTodos,setNotes,setFCMToken,deleteStoreTodo}=userSlice.actions
+export const {setUser,setTodos,setNotes,setFCMToken,deleteStoreTodo,setTodoCompletion}=userSlice.actions
 export default userSlice.reducer
