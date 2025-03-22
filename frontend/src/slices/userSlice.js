@@ -24,7 +24,7 @@ const userSlice=createSlice({
           state.todos=[...state.todos,action.payload]
         },
         setNotes:(state,action)=>{
-            state.notes.push(action.payload)
+            state.notes=[...state.notes,action.payload]
         },
         setFCMToken:(state,action)=>{
             state.fcmToken=action.payload

@@ -52,3 +52,9 @@ export const taskCompleted=({id,completed})=>{
         completed
     })
 }
+
+export const createNote=(title)=>{
+    return api.post('/user/create-note',{
+        title
+    })
+}

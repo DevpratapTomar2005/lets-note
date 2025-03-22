@@ -13,6 +13,7 @@ import NotesPage from "./components/NotesPage.jsx";
 import TodosPage from "./components/TodosPage.jsx";
 import Settings from "./components/Settings.jsx";
 import { setUser } from "./slices/userSlice.js";
+import NoteEditPage from "./components/NoteEditPage.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ loading?(
                   <Route path="/about" element={<Navigate to="/" />} />
                   <Route path="/contact" element={<Navigate to="/" />} /> 
                   <Route path="/settings" element={<Settings/>} /> 
+                  <Route path="/note/:noteId" element={<NoteEditPage/>}/>
                   </>
                 ):(<>
                 <Route path="/login" element={<Login />} />

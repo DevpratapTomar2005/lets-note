@@ -7,4 +7,5 @@ const router=express.Router()
 router.post('/create-todo',checkAuth,userControllers.createTodo)
 router.post('/delete-todo',checkAuth,userControllers.deleteTodo)
 router.post('/task-completed',checkAuth,userControllers.taskCompleted)
+router.post('/create-note',checkAuth,userControllers.createNote)
 export default router

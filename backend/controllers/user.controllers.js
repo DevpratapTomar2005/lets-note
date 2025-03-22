@@ -82,9 +82,27 @@ const taskCompleted=async(req,res)=>{
     return res.status(500).json({message:'Something went wrong!'})
    }
 }
+
+const createNote=async(req,res)=>{
+    const title=req.body.title
+   
+    try {
+        const user=await User.findById(req.user.id).select('-todos -refreshToken -createdAt -updatedAt')
+        if(!user){
+            return res.status(400).json({message:'User not found!'})
+        }
+        user.notes.push({title})
+        await user.save({validateBeforeSave:false})
+        const savedNote=user.notes[user.notes.length-1]
+        return res.status(201).json({message:'Note Created Successfully!',note:savedNote})
+    } catch (error) {
+        return res.status(500).json({message:'Something went wrong!'})
+    }
+}
 export default {
     
     createTodo,
     deleteTodo,
-    taskCompleted
+    taskCompleted,
+    createNote
 }

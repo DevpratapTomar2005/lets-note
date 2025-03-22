@@ -8,6 +8,7 @@ const notesSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true,
+    default:""
   },
   images:{
     type:[String],

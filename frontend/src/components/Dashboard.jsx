@@ -22,7 +22,7 @@ const Dashboard = () => {
   
   let currentMonth=new Date().getMonth()+1
   return (
-    <div className="h-[calc(90vh+16px)] relative w-full top-[2.74rem] ml-20">
+    <div className="h-[calc(90vh+16px)] bg-white relative w-full top-[2.74rem] ml-20">
       {showCreateModal && <CreateModal />}
       <div className="upcoming-tasks my-12 mx-22">
         <div className="flex items-center">

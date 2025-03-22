@@ -2,8 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { setShowCreateModal } from "../slices/showCreateModal";
-import { useMutation } from "@tanstack/react-query";
-import { createTodo } from "../services/apiCalls";
+import { Mutation, useMutation } from "@tanstack/react-query";
+import { createTodo,createNote } from "../services/apiCalls";
 import { refreshUserToken } from "../services/apiCalls";
 import { isLoggedIn } from "../slices/loginSlice";
 import { setTodos,setNotes } from "../slices/userSlice";
@@ -28,7 +28,7 @@ const CreateModal = () => {
 
   const fcmToken=useSelector(state=>state.user.fcmToken)
  
-    const {mutate,isPending} = useMutation({
+    const {mutate,isPending:todoIsCreating} = useMutation({
         mutationFn:async(data)=>{
             return await createTodo({data})
         },
@@ -40,24 +40,49 @@ const CreateModal = () => {
             },1800)
             
         },
-        onError:async(error)=>{
+        onError:async(error,data)=>{
             if(error.status===401){
-                await refreshUserToken().then(
-                    await createTodo().then((secondRes)=>{
-                        dispatch(setTodos(secondRes.data.todo))
-                        toast.success(`${secondRes.data.message}`)
-                    }
-                )
-                ).catch((error)=>{
-                    dispatch(isLoggedIn(false)),
-                    navigate('/login'),
-                    toast.error('Logged out successfully!')
-                })
+              try {
+                await refreshUserToken()
+                mutate(data)
+              } catch (error) {
+                dispatch(isLoggedIn(false))
+                navigate('/login')
+               toast.error('User Logged Out!')
+              }
             }
-            toast.error(`${error.response.data.message}`)
+            else{
+
+              toast.error(`${error.response.data.message}`)
+            }
         }
     })
    
+    const {mutate:creatingNote, isPending:noteIsCreating}=useMutation({
+      mutationFn:async(title)=>{
+        return await createNote(title)
+      },
+      onSuccess:(response)=>{
+        dispatch(setNotes(response.data.note))
+        navigate(`/note/${response.data.note._id}`)
+      },
+      onError:async(error,title)=>{
+        if(error.status===401){
+        try {
+            await refreshUserToken()
+            creatingNote(title)
+        } catch (error) {
+          dispatch(isLoggedIn(false))
+           navigate('/login')
+          toast.error('User Logged Out!')
+        }
+          
+        }
+       else{
+        toast.error(`${error.response.data.message}`)
+       }
+      }
+    })
     
     const createHandler=()=>{
         if(task==='todo'){
@@ -71,6 +96,9 @@ const CreateModal = () => {
           mutate({todoData})
                
     }
+    if(task==='notes'){
+      creatingNote(noteTitle)
+    }
     
 }
 
@@ -78,7 +106,7 @@ const CreateModal = () => {
     <>
       <div
         className={`fixed z-10 w-1/3 bg-white shadow-2xl rounded-lg ${
-          wantNotification === true ? "top-[12%]" : "top-[18%]"
+          wantNotification === true ? `${task==="notes"?("top-[25%]"):("top-[12%]")}` : `${task==="notes"?("top-[25%]"):("top-[18%]")}`
         } right-[32%] border-2  border-black px-8 py-4`}
       >
         <label htmlFor="selectTasks" className="text-xl font-medium">
@@ -189,7 +217,7 @@ const CreateModal = () => {
           </button>
           <button className="bg-purple-600 text-white p-2 rounded-md hover:bg-purple-500" onClick={()=>createHandler()}>
             {
-                (isPending)?'Creating...':`Create ${task === "todo" ? "Todo" : "Note"}`
+                (todoIsCreating||noteIsCreating)?'Creating...':`Create ${task === "todo" ? "Todo" : "Note"}`
             }
           </button>
         </div>
