@@ -90,20 +90,20 @@ const {mutate:completeTodo}=useMutation({
  
   return (
     
-    <div className="pt-7 pb-1 px-3 outline-2 outline-purple-800 w-[300px] my-2 rounded-md" >
+    <div className="pt-7 flex flex-col justify-between pb-1 px-3 outline-2 outline-purple-800 h-[100%] w-[300px] my-2 rounded-md" >
       <div className="flex justify-between items-center">
 
         <div className="flex gap-2">
         <input type="checkbox" name="taskCheck" id="taskCheck" defaultChecked={(todo.completed)?true:false} onChange={()=>onCheckHandler(todo._id,!todo.completed)} className="accent-purple-500 w-[18px]" />
-        <span className="text-purple-600"><h2 className={todo.completed?'line-through': null}>{todo.title}</h2></span>
+        <span className="text-purple-600 w-[200px]"><h2 className={todo.completed?'line-through': null}>{todo.title}</h2></span>
         </div>
         <div className='p-1 hover:bg-gray-100 rounded-full' onClick={()=>deleteTodoHandler(todo._id)}>
-          <img src={deleteTodoImg} className='w-[20px] opacity-[0.8]' alt="verticle dots" />
+          <img src={deleteTodoImg} className='w-[22px] opacity-[0.8]' alt="delete" />
         </div>
       </div>
       <div className='mt-3 flex justify-between'>
       {
-            (todo.notifyMe)?( <div className='flex  opacity-[0.5] cursor-default hover:opacity-[1]'>
+            (todo.notifyMe)?( <div className='flex opacity-[0.5] cursor-default hover:opacity-[1]'>
           
               <img src={clock} className='w-[16px]' alt="clock" />
               <span className='text-sm text-purple-700 mx-1'>{todo.notificationTime}</span>

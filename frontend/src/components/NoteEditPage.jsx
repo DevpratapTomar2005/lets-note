@@ -5,12 +5,12 @@ const NoteEditPage = () => {
    
     const {noteId}=useParams()
    
-    const note=notes.filter((n)=>n._id==noteId)
+    const note=notes.filter((n)=>n._id==noteId)[0]
     
   return (
     <div className="relative top-[2.74rem]">
-        <div>Title:{note[0].title}</div>
-        <div>content:{note[0].content}</div>
+        <div>Title:{note.title}</div>
+        <div>content:{note.content}</div>
     </div>
   )
 }
