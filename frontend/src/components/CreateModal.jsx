@@ -64,7 +64,12 @@ const CreateModal = () => {
       },
       onSuccess:(response)=>{
         dispatch(setNotes(response.data.note))
-        navigate(`/note/${response.data.note._id}`)
+        setTimeout(()=>{
+          dispatch(setShowCreateModal(false))
+        },400)
+        setTimeout(()=>{
+          navigate(`/note/${response.data.note._id}`)
+        },700)
       },
       onError:async(error,title)=>{
         if(error.status===401){

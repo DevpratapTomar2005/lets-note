@@ -99,10 +99,30 @@ const createNote=async(req,res)=>{
         return res.status(500).json({message:'Something went wrong!'})
     }
 }
+
+const deleteNote=async(req,res)=>{
+    const id=req.body.id
+    
+    
+   try {
+     const user=await User.findById(req.user.id).select('-todos -refreshToken -createdAt -updatedAt')
+     if(!user){
+         return res.status(400).json({message:'User not found!'})
+     }
+     
+     const unDeletedNotes=user.notes.filter(todo=>todo._id.toString()!==id)
+     user.notes=unDeletedNotes
+     await user.save({validateBeforeSave:false})
+     return res.status(201).json({message:'Note Deleted Successfully!',id})
+   } catch (error) {
+    return res.status(500).json({message:'Something went wrong!'})
+   }
+}
 export default {
     
     createTodo,
     deleteTodo,
     taskCompleted,
-    createNote
+    createNote,
+    deleteNote
 }

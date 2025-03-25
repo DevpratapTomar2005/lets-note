@@ -42,12 +42,12 @@ export const createTodo=({data})=>{
 }
 
 export const deleteTodo=(id)=>{
-    return api.post(`/user/delete-todo`,{
+    return api.post('/user/delete-todo',{
         id:id
     })
 }
 export const taskCompleted=({id,completed})=>{
-    return api.post(`/user/task-completed`,{
+    return api.post('/user/task-completed',{
         id,
         completed
     })
@@ -56,5 +56,10 @@ export const taskCompleted=({id,completed})=>{
 export const createNote=(title)=>{
     return api.post('/user/create-note',{
         title
+    })
+}
+export const deleteNote=(id)=>{
+    return api.post('/user/delete-note',{
+       id
     })
 }

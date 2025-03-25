@@ -5,9 +5,11 @@ import { setFCMToken } from "../slices/userSlice";
 import { requestFCMToken } from "../services/firebase";
 import { useEffect } from "react";
 import Todo from '../components/Todo.jsx'
+import Note from '../components/Note.jsx'
 const Dashboard = () => {
   const showCreateModal = useSelector(state => state.showCreateModal.value)
   const todos=useSelector(state=>state.user.todos)
+  const notes=useSelector(state=>state.user.notes)
   const dispatch=useDispatch()
   useEffect(()=>{
     const generatingFcmToken=async()=>{
@@ -48,6 +50,19 @@ const Dashboard = () => {
           <span className="text-gray-500 font-roboto text-3xl">Recent Notes</span>
           
         </div>
+        <div className=" flex flex-wrap gap-3 mx-13 my-7">
+        {
+         
+          notes.map((note,index)=>{
+           
+            if(new Date(note.createdAt).getMonth()+1==currentMonth || new Date(note.updatedAt).getMonth()+1==currentMonth){
+
+              return <Note key={index} note={note}/>
+            }
+          })
+        }
+        
+      </div>
       </div>
 
     </div>
