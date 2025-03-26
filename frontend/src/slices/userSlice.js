@@ -38,10 +38,13 @@ const userSlice=createSlice({
 
         deleteStoreNote:(state,action)=>{
             state.notes=state.notes.filter((note)=>note._id!==action.payload)
-        }
+        },
 
+        updateStoreNote:(state,action)=>{
+            state.notes.filter((note)=>note._id===action.payload.id)[0].content=action.payload.content
     }
+}
 })
 
-export const {setUser,setTodos,setNotes,setFCMToken,deleteStoreTodo,setTodoCompletion,deleteStoreNote}=userSlice.actions
+export const {setUser,setTodos,setNotes,setFCMToken,deleteStoreTodo,setTodoCompletion,deleteStoreNote,updateStoreNote}=userSlice.actions
 export default userSlice.reducer

@@ -63,3 +63,11 @@ export const deleteNote=(id)=>{
        id
     })
 }
+
+export const updateNote=({id,content})=>{
+    
+    return api.post('/user/update-note',{
+        id,
+        content
+    })
+}

@@ -9,4 +9,5 @@ router.post('/delete-todo',checkAuth,userControllers.deleteTodo)
 router.post('/task-completed',checkAuth,userControllers.taskCompleted)
 router.post('/create-note',checkAuth,userControllers.createNote)
 router.post('/delete-note',checkAuth,userControllers.deleteNote)
+router.post('/update-note',checkAuth,userControllers.editNote)
 export default router
