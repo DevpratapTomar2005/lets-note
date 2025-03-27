@@ -49,14 +49,20 @@ const NoteEditPage = () => {
 
   return (
     <div className="relative top-[2.74rem]">
-        <div>Title:{note.title}</div>
-        <div className="flex justify-center"><button className="py-2 px-4 bg-purple-600 text-white rounded hover:bg-purple-500" onClick={()=>handleEditorChange(editedContent)}>Save</button></div>
+        <div className="bg-white py-1 px-3 border-b-1 h-13 border-gray-300">{note.title}</div>
+        {/* <div className="flex justify-center"><button className="py-2 px-4 bg-purple-600 text-white rounded hover:bg-purple-500" onClick={()=>handleEditorChange(editedContent)}>Save</button></div> */}
+        <div>
+
         <Editor
         apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
         initialValue={note.content}
         init={{
-          height: 500,
+          height: '83vh',
+          branding: false,
+          skin:'borderless',
           menubar: true,
+          help_accessibility:false,
+          
           plugins: [
             'advlist', 'autolink', 'lists', 'link', 'image', 
             'charmap', 'preview', 'anchor', 'searchreplace', 
@@ -66,10 +72,14 @@ const NoteEditPage = () => {
           toolbar: 'undo redo | formatselect | ' +
             'bold italic backcolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help'
+            'removeformat | help',
+            
+         
         }}
+        
         onEditorChange={(editedText)=>setEditedContent(editedText)}
         />
+        </div>
     </div>
   )
 }
