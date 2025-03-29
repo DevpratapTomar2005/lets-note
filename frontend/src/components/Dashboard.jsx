@@ -20,7 +20,7 @@ const Dashboard = () => {
       
     }
     generatingFcmToken()
-  })
+  },[])
   
   let currentMonth=new Date().getMonth()+1
   return (
