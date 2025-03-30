@@ -3,7 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import { useMutation } from "@tanstack/react-query";
-import { updateNote, refreshUserToken } from "../services/apiCalls";
+import {
+  updateNote,
+  refreshUserToken,
+  uploadContentImg,
+} from "../services/apiCalls";
 import { updateStoreNote } from "../slices/userSlice";
 import { isLoggedIn } from "../slices/loginSlice";
 import { toast } from "react-toastify";
@@ -17,7 +21,7 @@ const NoteEditPage = () => {
   const note = notes.filter((n) => n._id == noteId)[0];
   const [editedContent, setEditedContent] = useState(note.content);
 
-  const { mutate: editNote ,isPending:saving } = useMutation({
+  const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
       return await updateNote({ id, content });
     },
@@ -45,30 +49,53 @@ const NoteEditPage = () => {
     },
   });
 
+  const { mutate: uploadTinyMCEImage } = useMutation({
+    mutationFn: async (formData) => {
+      const response = await uploadContentImg(formData);
+      return response;
+    },
+  });
+
   const handleEditorChange = (content) => {
     editNote({ id: note._id, content });
   };
+  const handleImageUpload = (blobInfo, progress) => {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("tinyMCEImg", blobInfo.blob(), blobInfo.filename());
 
+      uploadTinyMCEImage(formData, {
+        onSuccess: (response) => {
+          resolve(response.data.url);
+        },
+        onError: async (error) => {
+          console.error("Upload failed:", error);
+          if (error.status === 401) {
+            try {
+              await refreshUserToken();
+              handleImageUpload(blobInfo, progress);
+            } catch (error) {
+              dispatch(isLoggedIn(false));
+              navigate("/login");
+              toast.error("User Logged Out!");
+            }
+          }
+          reject({ message: "Image upload failed", remove: true });
+        },
+      });
+    });
+  };
   return (
     <div className="relative top-[2.74rem]">
       <div className="flex justify-between items-center bg-white py-1 px-3 border-b-1 h-13 border-gray-300">
-        <div className="text-gray-600 text-lg">
-         Title: {note.title}
-        </div>
+        <div className="text-gray-600 text-lg">Title: {note.title}</div>
         <div>
-          <span>
-            <label htmlFor="imageInput" className="bg-blue-500 hover:bg-blue-600 text-white text-[14px] py-2 px-1 rounded">Add Image</label>
-            <input
-              type="file"
-              className="hidden"
-              id="imageInput"
-              name="imageInput"
-            />
-          </span>
-          <span className=" text-[14px] py-2 px-4 rounded outline-2 cursor-pointer outline-purple-500 text-purple-500 mx-2 hover:bg-purple-500 hover:text-white" onClick={()=>handleEditorChange(editedContent)}>
-            {
-              saving?'Saving...':'Save'
-            }
+         
+          <span
+            className=" text-[14px] py-2 px-4 rounded outline-2 cursor-pointer outline-purple-500 text-purple-500 mx-2 hover:bg-purple-500 hover:text-white"
+            onClick={() => handleEditorChange(editedContent)}
+          >
+            {saving ? "Saving..." : "Save"}
           </span>
         </div>
       </div>
@@ -108,6 +135,48 @@ const NoteEditPage = () => {
               "bold italic backcolor | alignleft aligncenter " +
               "alignright alignjustify | bullist numlist outdent indent | " +
               "removeformat | help",
+            images_upload_handler: handleImageUpload,
+            automatic_uploads: true,
+
+            
+            file_picker_types: "image",
+            file_picker_callback: function (cb, value, meta) {
+              const input = document.createElement("input");
+              input.setAttribute("type", "file");
+              input.setAttribute("accept", "image/*");
+
+              input.onchange = function () {
+                const file = this.files[0];
+
+                // Validate file type and size
+                const validTypes = [
+                  "image/jpeg",
+                  "image/png",
+                  "image/gif",
+                  "image/webp",
+                ];
+                if (!validTypes.includes(file.type)) {
+                  alert(
+                    "Please select a valid image file (JPEG, PNG, GIF, WEBP)"
+                  );
+                  return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+                  alert("File size should be less than 5MB");
+                  return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                  // Call the callback with the image URL
+                  cb(e.target.result, { alt: file.name });
+                };
+                reader.readAsDataURL(file);
+              };
+
+              input.click();
+            },
           }}
           onEditorChange={(editedText) => setEditedContent(editedText)}
         />

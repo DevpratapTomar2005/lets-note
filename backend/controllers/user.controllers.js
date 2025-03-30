@@ -1,7 +1,7 @@
 import User from '../models/userSchema.js'
 import sendNotifications from '../utils/notificationService.js'
 import schedule from 'node-schedule'
-
+import uploadImage from '../utils/cloudinary.js'
 
 const createTodo=async(req,res)=>{
     const {todoData}=req.body.todoData
@@ -121,7 +121,7 @@ const deleteNote=async(req,res)=>{
 
 const editNote=async(req,res)=>{
     const {id,content}=req.body
-   
+
    try {
      const user= await User.findById(req.user.id).select('-todos -refreshToken -createdAt -updatedAt')
      if(!user){
@@ -135,6 +135,23 @@ const editNote=async(req,res)=>{
    }
 
 }
+
+const uploadContentImg=async(req,res)=>{
+    const tinyMCEImg=req.file.path
+    
+    try {
+        const uploadResult=await uploadImage(tinyMCEImg)
+       
+        if(!uploadResult){
+            return res.status(400).json({message:'Image not uploaded!'})
+        }
+   
+        return res.status(201).json({message:'Image uploaded successfully!',url:uploadResult.secure_url})
+    } catch (error) {
+        return res.status(500).json({message:'Something went wrong!'})
+        
+    }
+}
 export default {
     
     createTodo,
@@ -142,5 +159,6 @@ export default {
     taskCompleted,
     createNote,
     deleteNote,
-    editNote
+    editNote,
+    uploadContentImg
 }

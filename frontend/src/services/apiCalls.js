@@ -71,3 +71,12 @@ export const updateNote=({id,content})=>{
         content
     })
 }
+
+export const uploadContentImg=(formData)=>{
+   
+    return api.post('/user/upload-content-img',formData,{
+        headers:{
+            'Content-Type':'multipart/form-data'
+        }
+    })
+}
