@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
@@ -11,7 +11,7 @@ import {
 import { updateStoreNote } from "../slices/userSlice";
 import { isLoggedIn } from "../slices/loginSlice";
 import { toast } from "react-toastify";
-
+import { jsPDF } from 'jspdf';
 const NoteEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,7 +20,8 @@ const NoteEditPage = () => {
 
   const note = notes.filter((n) => n._id == noteId)[0];
   const [editedContent, setEditedContent] = useState(note.content);
-
+  const editorRef = useRef(null);
+ 
   const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
       return await updateNote({ id, content });
@@ -85,12 +86,40 @@ const NoteEditPage = () => {
       });
     });
   };
+
+
+  const handleWordDownload = (noteTitle) => {
+    if (editorRef.current) {
+    
+      const content = editorRef.current.getContent();
+      
+      
+      const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+                    "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+                    "xmlns='http://www.w3.org/TR/REC-html40'>" +
+                    "<head><meta charset='utf-8'><title>Export HTML to Word</title></head><body>";
+      const footer = "</body></html>";
+      const sourceHTML = header + content + footer;
+      
+      const blob = new Blob([sourceHTML], {type: 'application/msword'});
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${noteTitle}.doc`; 
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
+
   return (
     <div className="relative top-[2.74rem]">
       <div className="flex justify-between items-center bg-white py-1 px-3 border-b-1 h-13 border-gray-300">
         <div className="text-gray-600 text-lg">Title: {note.title}</div>
         <div>
-         
+         <button className="bg-blue-500 text-white p-2 text-sm rounded hover:bg-blue-600" onClick={()=>handleWordDownload(note.title)}>Download</button>
           <span
             className=" text-[14px] py-2 px-4 rounded outline-2 cursor-pointer outline-purple-500 text-purple-500 mx-2 hover:bg-purple-500 hover:text-white"
             onClick={() => handleEditorChange(editedContent)}
@@ -104,6 +133,7 @@ const NoteEditPage = () => {
         <Editor
           apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
           initialValue={note.content}
+          onInit={(evt, editor) => editorRef.current = editor}
           init={{
             height: "83vh",
             branding: false,
@@ -180,6 +210,8 @@ const NoteEditPage = () => {
           }}
           onEditorChange={(editedText) => setEditedContent(editedText)}
         />
+
+        
       </div>
     </div>
   );
