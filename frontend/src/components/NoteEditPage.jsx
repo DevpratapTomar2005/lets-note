@@ -11,7 +11,7 @@ import {
 import { updateStoreNote } from "../slices/userSlice";
 import { isLoggedIn } from "../slices/loginSlice";
 import { toast } from "react-toastify";
-import { jsPDF } from 'jspdf';
+
 const NoteEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
