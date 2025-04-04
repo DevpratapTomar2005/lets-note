@@ -1,4 +1,4 @@
-import { useState,useRef } from "react";
+import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
@@ -19,8 +19,8 @@ const NoteEditPage = () => {
   const { noteId } = useParams();
 
   const note = notes.filter((n) => n._id == noteId)[0];
-  const [editedContent, setEditedContent] = useState(note.content);
-  const editorRef = useRef(null);
+ 
+  const editorRef = useRef(note.content);
  
   const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
@@ -89,9 +89,9 @@ const NoteEditPage = () => {
 
 
   const handleWordDownload = (noteTitle) => {
-    if (editorRef.current) {
-    
-      const content = editorRef.current.getContent();
+    if (editorRef.current || editorRef.current === "") {
+      
+      const content = editorRef.current
       
       
       const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
@@ -113,7 +113,8 @@ const NoteEditPage = () => {
       URL.revokeObjectURL(url);
     }
   };
-
+  
+  
   return (
     <div className="relative top-[2.74rem]">
       <div className="flex justify-between items-center bg-white py-1 px-3 border-b-1 h-13 border-gray-300">
@@ -122,7 +123,7 @@ const NoteEditPage = () => {
          <button className="bg-blue-500 text-white p-2 text-sm rounded hover:bg-blue-600" onClick={()=>handleWordDownload(note.title)}>Download</button>
           <span
             className=" text-[14px] py-2 px-4 rounded outline-2 cursor-pointer outline-purple-500 text-purple-500 mx-2 hover:bg-purple-500 hover:text-white"
-            onClick={() => handleEditorChange(editedContent)}
+            onClick={() => handleEditorChange(editorRef.current)}
           >
             {saving ? "Saving..." : "Save"}
           </span>
@@ -133,7 +134,7 @@ const NoteEditPage = () => {
         <Editor
           apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
           initialValue={note.content}
-          onInit={(evt, editor) => editorRef.current = editor}
+          // onInit={(evt, editor) => editorRef.current = editor}
           init={{
             height: "83vh",
             branding: false,
@@ -178,7 +179,7 @@ const NoteEditPage = () => {
               input.onchange = function () {
                 const file = this.files[0];
 
-                // Validate file type and size
+                
                 const validTypes = [
                   "image/jpeg",
                   "image/png",
@@ -199,7 +200,7 @@ const NoteEditPage = () => {
 
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                  // Call the callback with the image URL
+               
                   cb(e.target.result, { alt: file.name });
                 };
                 reader.readAsDataURL(file);
@@ -208,7 +209,10 @@ const NoteEditPage = () => {
               input.click();
             },
           }}
-          onEditorChange={(editedText) => setEditedContent(editedText)}
+          onEditorChange={(e) => {
+            
+            editorRef.current = e;
+          }}
         />
 
         
