@@ -42,7 +42,7 @@ function App() {
 
    
     checkUserPersistence();
-  })
+  },[])
 
  
   const isLogged = useSelector((state) => state.login.value);

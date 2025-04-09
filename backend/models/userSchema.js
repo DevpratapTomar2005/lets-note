@@ -19,8 +19,14 @@ const userSchema=new mongoose.Schema({
         type:String,
         default:""
     },
-    todos:[todoSchema],
-    notes:[notesSchema],
+    todos:{
+        type:[todoSchema],
+        default:[]
+    },
+    notes:{
+        type:[notesSchema],
+        default:[]
+    },
 },{ timestamps:true })
 
 const User=mongoose.model("User",userSchema)
