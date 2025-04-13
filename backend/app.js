@@ -89,6 +89,10 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("receive-message", message)
   })
 
+  socket.on("send-updated-text",(content,roomId)=>{
+    
+    socket.to(roomId).emit("receive-updated-text",content)
+  })
 })
 
 server.listen(port, () => {

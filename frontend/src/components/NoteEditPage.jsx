@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
@@ -25,12 +25,13 @@ const NoteEditPage = () => {
   const[joinedRoom,setJoinedRoom]=useState(false)
   const notes = useSelector((state) => state.user.notes);
   const { noteId } = useParams();
-
   const note = notes.filter((n) => n._id == noteId)[0];
+  const [content, setContent] = useState(note.content);
   const userFullName=useSelector(state=>state.user.fullname)
-  const editorRef = useRef(note.content);
-  const socketRef = useRef(null);
+  const editorRef = useRef("");
 
+  const socketRef = useRef(null);
+ 
   const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
       return await updateNote({ id, content });
@@ -139,6 +140,28 @@ const NoteEditPage = () => {
       setJoinedRoom(true)
   };
 }
+const sendUpdatedText=(content)=>{
+  socketRef.current.emit("send-updated-text", content, roomID)
+}
+useEffect(()=>{
+  console.log(joinedRoom)
+  if(socketRef.current && joinedRoom){
+
+    socketRef.current.on("receive-updated-text",(content)=>{
+      
+      setContent(content)
+
+      
+    })
+  }
+  return () => {
+    if(socketRef.current && joinedRoom) {
+    
+      socketRef.current.off("receive-updated-text");
+    }
+  };
+})
+
 
   return (
     <div className="relative top-[2.74rem]">
@@ -199,7 +222,8 @@ const NoteEditPage = () => {
         <div className="w-2/3 h-[calc(100vh-7rem)] border-gray-300 m-2">
           <Editor
             apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
-            initialValue={note.content}
+            value={content}
+        
             init={{
               height: "100%",
               branding: false,
@@ -274,6 +298,9 @@ const NoteEditPage = () => {
             }}
             onEditorChange={(e) => {
               editorRef.current = e;
+              if(socketRef.current && joinedRoom) {
+                sendUpdatedText(e)
+              }
             }}
           />
         </div>
