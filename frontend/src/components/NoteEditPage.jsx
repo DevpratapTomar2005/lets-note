@@ -28,9 +28,9 @@ const NoteEditPage = () => {
   const note = notes.filter((n) => n._id == noteId)[0];
   const [content, setContent] = useState(note.content);
   const userFullName=useSelector(state=>state.user.fullname)
-  const editorRef = useRef("");
+ 
 
-  const socketRef = useRef(null);
+  const socketRef = useRef(null)
  
   const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
@@ -98,8 +98,8 @@ const NoteEditPage = () => {
   };
 
   const handleWordDownload = (noteTitle) => {
-    if (editorRef.current || editorRef.current === "") {
-      const content = editorRef.current;
+    if (content || content === "") {
+     
 
       const header =
         "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
@@ -133,8 +133,9 @@ const NoteEditPage = () => {
       return;
     }
     if(!socketRef.current) {
-      socketRef.current= await initSocket()
-      setJoinedRoom(true)
+      socketRef.current= await initSocket() 
+      setJoinedRoom(true) 
+     
     }
     if(socketRef.current && !joinedRoom) {
       setJoinedRoom(true)
@@ -176,7 +177,7 @@ useEffect(()=>{
           </button>
           <span
             className=" text-[14px] py-2 px-4 rounded outline-2 cursor-pointer outline-purple-500 text-purple-500 mx-2 hover:bg-purple-500 hover:text-white"
-            onClick={() => handleEditorChange(editorRef.current)}
+            onClick={() => handleEditorChange(content)}
           >
             {saving ? "Saving..." : "Save"}
           </span>
@@ -297,7 +298,7 @@ useEffect(()=>{
               },
             }}
             onEditorChange={(e) => {
-              editorRef.current = e;
+              setContent(e)
               if(socketRef.current && joinedRoom) {
                 sendUpdatedText(e)
               }
