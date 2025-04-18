@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 import {useSelector} from "react-redux"
-import userImg from '../assets/images/userimg.svg'
+import Avatar from 'react-avatar'
 const Navbar = () => {
   const isLogged=useSelector((state)=>state.login.value)
   const userFullName=useSelector(state=>state.user.fullname)
@@ -39,8 +39,8 @@ const Navbar = () => {
             <div className="font-medium text-[13px]">
               {userFullName}
             </div>
-            <div className="bg-gray-100 p-1 rounded">
-              <img src={userImg} alt="user profile"/>
+            <div>
+            <Avatar name={userFullName} size="28" maxInitials={2} textSizeRatio="2" round="4px" color="magenta"/>
             </div>
           </div>
           </>

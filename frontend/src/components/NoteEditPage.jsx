@@ -145,7 +145,7 @@ const sendUpdatedText=(content)=>{
   socketRef.current.emit("send-updated-text", content, roomID)
 }
 useEffect(()=>{
-  console.log(joinedRoom)
+  
   if(socketRef.current && joinedRoom){
 
     socketRef.current.on("receive-updated-text",(content)=>{

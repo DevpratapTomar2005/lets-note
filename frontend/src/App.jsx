@@ -18,6 +18,7 @@ import NoteEditPage from "./components/NoteEditPage.jsx";
 function App() {
   const dispatch = useDispatch();
   const [loading,setIsLoading]=useState(true)
+  const isLogged = useSelector((state) => state.login.value);
   useEffect(() => {
     const checkUserPersistence = async () => {
       try {
@@ -45,7 +46,6 @@ function App() {
   },[])
 
  
-  const isLogged = useSelector((state) => state.login.value);
   return (
   
 loading?(
