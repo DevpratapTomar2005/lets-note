@@ -3,7 +3,7 @@ import {useSelector} from "react-redux"
 import Avatar from 'react-avatar'
 const Navbar = () => {
   const isLogged=useSelector((state)=>state.login.value)
-  const userFullName=useSelector(state=>state.user.fullname)
+  const user=useSelector(state=>state.user)
   
   return (
     <>
@@ -37,10 +37,14 @@ const Navbar = () => {
 
           <div className="flex gap-1 bg-purple-800 rounded-md p-1 items-center cursor-pointer hover:bg-purple-400">
             <div className="font-medium text-[13px]">
-              {userFullName}
+              {user.fullname}
             </div>
             <div>
-            <Avatar name={userFullName} size="28" maxInitials={2} textSizeRatio="2" round="4px" color="magenta"/>
+           {
+              (!user.pfp)?( <Avatar name={user.fullname} size="28" maxInitials={2} textSizeRatio="2" round="4px" color="magenta"/>):(<img src={user.pfp}
+              className={`w-7 h-7 rounded ${(!user.pfp)?(null):("object-fill")}`} alt="profile image"/>)
+            }
+           
             </div>
           </div>
           </>

@@ -43,7 +43,7 @@ const userRegister = async (req, res) => {
         secure: true,
         sameSite: "Strict",
       })
-      .json({ message: "User registered successfully!",user:{fullname:user.fullname,email:user.email} });
+      .json({ message: "User registered successfully!",user:{fullname:user.fullname,email:user.email,pfp:user.pfpUrl} });
   } catch (error) {
     
     return res.status(500).json({ message: "Something went wrong!" });
@@ -82,7 +82,7 @@ const userLogin = async (req, res) => {
         secure: true,
         sameSite: "Strict",
       })
-      .json({ message: "User logged in successfully!",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes} });
+      .json({ message: "User logged in successfully!",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes,pfp:user.pfpUrl} });
   } catch (error) {
     return res.status(500).json({ message: "Something went wrong!" });
   }
@@ -193,7 +193,7 @@ const persistUserNextVisit = async (req, res) => {
 
     if (decodedRefreshToken && decodedAccessToken) {
       const user=await User.findById(decodedAccessToken.id).select('-refreshToken -password -createdAt -updatedAt')
-      return res.status(200).json({ message: "User Logged In",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes} });
+      return res.status(200).json({ message: "User Logged In",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes,pfp:user.pfpUrl} });
     } else {
       return res
         .status(400)

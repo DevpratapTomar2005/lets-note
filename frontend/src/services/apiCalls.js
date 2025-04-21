@@ -80,3 +80,11 @@ export const uploadContentImg=(formData)=>{
         }
     })
 }
+
+export const uploadPfp=(formData)=>{
+    return api.post('/user/upload-pfp',formData,{
+        headers:{
+            'Content-Type':'multipart/form-data'
+        }
+    })
+}

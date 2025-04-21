@@ -1,12 +1,13 @@
+
 import LeftSideBar from "./LeftSideBar"
 import { useSelector } from "react-redux"
 import CreateModal from "./CreateModal"
 import Avatar from 'react-avatar'
-import { refreshUserToken, userLogout } from "../services/apiCalls";
+import { refreshUserToken, userLogout, uploadPfp } from "../services/apiCalls";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
-
+import {setPfp} from "../slices/userSlice"
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import editButton from "../assets/icons and logos/edit.svg"
@@ -45,9 +46,31 @@ const Settings = () => {
         }
       },
     });
+
+    const {mutate:uploadProfileImg}=useMutation({
+        mutationFn:async(formData)=>{
+          return await uploadPfp(formData)
+        }
+        ,
+        onSuccess:(response)=>{
+          dispatch(setPfp(response.data.pfpUrl))
+          toast.success(response.data.message)
+        },
+        onError:(error)=>{
+          console.log(error.response.data.message)
+        }
+    })
+
     const logoutUser = () => {
       logout()
     }
+
+    const getPfp=(image)=>{
+      const formData = new FormData()
+      formData.append("pfp", image)
+      uploadProfileImg(formData)
+    }
+    console.log(user.pfp)
   return (
     <div className="flex">
     <LeftSideBar/>
@@ -56,10 +79,17 @@ const Settings = () => {
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-full flex flex-col justify-center items-center gap-10">
         <div className="relative w-fit h-fit shadow-md shadow-gray-300 rounded-full">
-        <Avatar  name={user.fullname} round={true} size="220" maxInitials={2} color="magenta"/>
-        <div className="absolute bg-purple-500 p-3 rounded-full text-white  z-10 bottom-4 right-0 shadow-md shadow-gray-400 cursor-pointer">
+          {
+            (!user.pfp)?(<Avatar  name={user.fullname} round={true} size="220" maxInitials={2} color="magenta"/>):(<img src={user.pfp}
+              className={`w-55 h-55 rounded-full ${(!user.pfp)?(null):("object-cover")}`} alt="profile image"/>)
+          }
+        
+        <label htmlFor="pfpInput">
+        <div className="absolute bg-purple-500 p-3 rounded-full text-white  z-10 bottom-4 right-0 shadow-md shadow-gray-400 cursor-pointer hover:bg-purple-400 hover:bottom-5 transition-all duration-150">
           <img src={editButton} alt="edit"/>
         </div>
+        </label>
+        <input type="file" id="pfpInput" className="hidden" onChange={(e)=>getPfp(e.target.files[0])} />
         </div>
         <div className="flex flex-col gap-5">
           <div className="bg-purple-50 py-3 px-2  text-lg w-105 border-b-2 border-purple-500 rounded">

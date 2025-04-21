@@ -6,7 +6,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadImage = async (localfilePath) => {
+export const uploadImage = async (localfilePath) => {
    try {
     if(!localfilePath) return;
      const uploadedRes= await cloudinary.uploader.upload(localfilePath, {
@@ -28,5 +28,27 @@ const uploadImage = async (localfilePath) => {
         }})
   }
 }
+export const uploadPfpImage = async (localfilePath,id) => {
+   try {
+    if(!localfilePath) return;
+     const uploadedRes= await cloudinary.uploader.upload(localfilePath, {
+         resource_type: "auto",
+         folder: "letsnote",
+         public_id:`profile-${id}`
+     })
 
-export default uploadImage
+    
+     return uploadedRes
+   } catch (error) {
+   throw new Error("Cloudinary upload error:", error)
+  
+    return null;
+   }
+  finally{
+    fs.unlink(localfilePath, (err) => {
+        if (err) {
+          throw err
+        }})
+  }
+}
+

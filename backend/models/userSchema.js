@@ -27,6 +27,10 @@ const userSchema=new mongoose.Schema({
         type:[notesSchema],
         default:[]
     },
+    pfpUrl:{
+        type:String,
+        default:""
+    }
 },{ timestamps:true })
 
 const User=mongoose.model("User",userSchema)

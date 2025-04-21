@@ -1,7 +1,7 @@
 import User from '../models/userSchema.js'
 import sendNotifications from '../utils/notificationService.js'
 import schedule from 'node-schedule'
-import uploadImage from '../utils/cloudinary.js'
+import {uploadImage,uploadPfpImage} from '../utils/cloudinary.js'
 
 const createTodo=async(req,res)=>{
     const {todoData}=req.body.todoData
@@ -152,6 +152,22 @@ const uploadContentImg=async(req,res)=>{
         
     }
 }
+const uploadPfp=async(req,res)=>{
+    const pfp=req.file.path
+    try {
+        
+        const uploadedPfp=await uploadPfpImage(pfp,req.user.id)
+        if(!uploadedPfp){
+            return res.status(400).json({message:'Image not uploaded!'})
+        }
+        const user=await User.findById(req.user.id).select('-todos -notes -refreshToken -createdAt -updatedAt')
+        user.pfpUrl=uploadedPfp.secure_url
+        await user.save({validateBeforeSave:false})
+        return res.status(201).json({message:'Image uploaded successfully!',pfpUrl:user.pfpUrl})
+    } catch (error) {
+        return res.status(500).json({message:'Something went wrong!'})
+    }
+}
 export default {
     
     createTodo,
@@ -160,5 +176,6 @@ export default {
     createNote,
     deleteNote,
     editNote,
-    uploadContentImg
+    uploadContentImg,
+    uploadPfp
 }

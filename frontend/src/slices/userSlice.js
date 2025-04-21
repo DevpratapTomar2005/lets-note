@@ -6,7 +6,8 @@ const initialState={
     email:'',
     todos:[],
     notes:[],
-    fcmToken:''
+    fcmToken:'',
+    pfp:""
 }
 
 const userSlice=createSlice({
@@ -19,6 +20,7 @@ const userSlice=createSlice({
             state.email=action.payload.email
             state.todos=action.payload.todos
             state.notes=action.payload.notes
+            state.pfp=action.payload.pfp
         },
         setTodos:(state,action)=>{
           state.todos=[...state.todos,action.payload]
@@ -42,9 +44,13 @@ const userSlice=createSlice({
 
         updateStoreNote:(state,action)=>{
             state.notes.filter((note)=>note._id===action.payload.id)[0].content=action.payload.content
-    }
-}
+        },
+        setPfp:(state,action)=>{
+            state.pfp=action.payload
+    
+    } 
+}  
 })
 
-export const {setUser,setTodos,setNotes,setFCMToken,deleteStoreTodo,setTodoCompletion,deleteStoreNote,updateStoreNote}=userSlice.actions
+export const {setUser,setTodos,setNotes,setFCMToken,deleteStoreTodo,setTodoCompletion,deleteStoreNote,updateStoreNote,setPfp}=userSlice.actions
 export default userSlice.reducer
