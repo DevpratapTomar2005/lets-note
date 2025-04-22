@@ -3,9 +3,11 @@ import Plus from '../assets/icons and logos/plus.svg'
 import Note from '../assets/icons and logos/note.svg'
 import Todo from '../assets/icons and logos/todo.svg'
 import Setting from '../assets/icons and logos/settings.svg'
+import AiImg from '../assets/icons and logos/ai.svg'
 import {Link} from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setShowCreateModal } from '../slices/showCreateModal'
+import { setShowChatBot } from '../slices/showChatBotSlice'
 const LeftSideBar = () => {
   const dispatch=useDispatch()
   return (
@@ -23,6 +25,11 @@ const LeftSideBar = () => {
       <Link to={'/notes'}>
       <img className="m-auto w-[28px]" src={Note} alt="Notes" />
       </Link>
+      </div>
+      <div onClick={()=>dispatch(setShowChatBot(true))} className="chat-bot transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
+      
+      <img className="m-auto w-[28px]" src={AiImg} alt="Ai" />
+     
       </div>
       </div>
       <div className="bottom relative bottom-[7%]">
