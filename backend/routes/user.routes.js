@@ -13,4 +13,5 @@ router.post('/delete-note',checkAuth,userControllers.deleteNote)
 router.post('/update-note',checkAuth,userControllers.editNote)
 router.post('/upload-content-img',checkAuth,upload.single('tinyMCEImg'),userControllers.uploadContentImg)
 router.post('/upload-pfp',checkAuth,upload.single('pfp'),userControllers.uploadPfp)
+router.post('/aiagent',checkAuth,userControllers.aiAgent)
 export default router

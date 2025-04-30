@@ -88,3 +88,10 @@ export const uploadPfp=(formData)=>{
         }
     })
 }
+
+export const promptAi=(prompt,fcmToken)=>{
+    return api.post('/user/aiagent',{
+        message:prompt,
+        fcmToken:fcmToken
+    })
+}

@@ -33,14 +33,19 @@ const Dashboard = () => {
         </div>
         <div className=" flex flex-wrap gap-3 mx-13 my-7">
         {
-         
-          todos.map((todo,index)=>{
-           
-            if(new Date(todo.dueDate).getMonth()+1==currentMonth){
+          todos&&todos.length>0?(
 
-              return <Todo key={index} todo={todo}/>
-            }
-          })
+            todos.map((todo,index)=>{
+             
+              if(new Date(todo.dueDate).getMonth()+1==currentMonth){
+  
+                return <Todo key={index} todo={todo}/>
+              }
+            })
+          ):(
+            <span className="text-gray-500 font-roboto text-sm">No Upcoming Tasks</span>
+          )
+         
         }
         
       </div>
@@ -52,14 +57,20 @@ const Dashboard = () => {
         </div>
         <div className=" flex flex-wrap gap-3 mx-13 my-7">
         {
-         
-          notes.map((note,index)=>{
-           
-            if(new Date(note.createdAt).getMonth()+1==currentMonth || new Date(note.updatedAt).getMonth()+1==currentMonth){
 
-              return <Note key={index} note={note}/>
-            }
-          })
+          notes&&notes.length>0?(
+            notes.map((note,index)=>{
+           
+              if(new Date(note.createdAt).getMonth()+1==currentMonth || new Date(note.updatedAt).getMonth()+1==currentMonth){
+  
+                return <Note key={index} note={note}/>
+              }
+            })
+          ):(
+            <span className="text-gray-500 font-roboto text-sm">No Recent Notes</span>
+          )
+         
+         
         }
         
       </div>
