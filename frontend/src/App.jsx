@@ -14,35 +14,50 @@ import TodosPage from "./components/TodosPage.jsx";
 import Settings from "./components/Settings.jsx";
 import { setUser } from "./slices/userSlice.js";
 import NoteEditPage from "./components/NoteEditPage.jsx";
-
+import { useMutation } from "@tanstack/react-query";
 function App() {
   const dispatch = useDispatch();
-  const [loading,setIsLoading]=useState(true)
+ 
   const isLogged = useSelector((state) => state.login.value);
-  useEffect(() => {
-    const checkUserPersistence = async () => {
-      try {
-        
-        const response = await persistUserNextVisit();
-        
-        
-        if (response.status===200) {
-          dispatch(isLoggedIn(true))
-          dispatch(setUser(response.data.user))
-        }
-      } catch (error) {
+  const [loading,setIsLoading]=useState(true)
+  const {mutate:checkPersistence}=useMutation({
 
+    mutationFn:async()=>{
+      return await persistUserNextVisit()
+    },
+    onSuccess:(response)=>{
+      dispatch(isLoggedIn(true))
+      dispatch(setUser(response.data.user))
+    },
+    onError:async(error)=>{
+      if(error.status===401){
+
+      try {
+          await refreshUserToken()
+         persistUserNextVisit()
+      } catch (error) {
         dispatch(isLoggedIn(false));
-      } finally {
-       setTimeout(()=>{
-        setIsLoading(false)
-       },700)
         
       }
-    };
+      }
+      else{
 
+        dispatch(isLoggedIn(false))
+      }
+    },
+    onSettled:()=>{
+      setTimeout(()=>{
+        setIsLoading(false)
+      })
+    }
    
-    checkUserPersistence();
+  })
+  
+  
+  
+  useEffect(() => {
+    checkPersistence()
+       
   },[])
 
  

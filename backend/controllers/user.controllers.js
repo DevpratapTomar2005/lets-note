@@ -173,7 +173,7 @@ const uploadPfp=async(req,res)=>{
 
 const makeTodoDeclaration= {
     name: 'create_todo',
-    description: "create a new todo and store it in a database with the given title, due Date, wantNotification, and notification time. ",
+    description: "create a new todo and store it in a database with the given title, due Date ,  wantNotification(optional), notification time(if user wants notification). ",
     parameters: {
       type: Type.OBJECT,
       properties: {
@@ -184,7 +184,7 @@ const makeTodoDeclaration= {
         },
         dueDate: {
           type: Type.STRING,
-          description: "user may have provided DD/MM/YYYY or MM/DD/YYYY format date but convert it into ISO date format (eg, '2023-10-01T00:00:00Z').",
+          description: "user may have provided DD/MM/YYYY or D/M/YY or DD-MM-YYYY or D-M-YY format date but convert it into ISO date format (eg, '2023-10-01T00:00:00Z').",
         },
         wantNotification: {
           type: Type.BOOLEAN,

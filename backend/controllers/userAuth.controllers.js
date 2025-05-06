@@ -129,6 +129,7 @@ const refreshUserToken = async (req, res) => {
       return res.status(400).json({ message: "Unauthorized user"  });
     }
     if (user.refreshToken !== refreshToken) {
+      console.log("Refresh token not matched!");
       return res.status(400).json({ message: "Unauthorized user"  });
     }
 

@@ -85,7 +85,7 @@ const NoteEditPage = () => {
           resolve(response.data.url);
         },
         onError: async (error) => {
-          console.error("Upload failed:", error);
+          
           if (error.status === 401) {
             try {
               await refreshUserToken();
@@ -97,6 +97,7 @@ const NoteEditPage = () => {
             }
           }
           reject({ message: "Image upload failed", remove: true });
+          
         },
       });
     });

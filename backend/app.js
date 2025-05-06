@@ -28,7 +28,7 @@ app.use("/api/user", userRoutes);
 //Socket.io
 const rooms = {};
 io.on("connection", (socket) => {
-  console.log("a user connected with socket id:", socket.id);
+ 
 
   socket.on("connected", (roomId, userFullName, roomName) => {
     socket.join(roomId);

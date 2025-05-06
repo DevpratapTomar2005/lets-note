@@ -32,17 +32,17 @@ const Settings = () => {
         
         if (error.response.status == 401) {
           try {
-            await refreshUserToken();
+            await refreshUserToken()
             logout();
           } catch (error) {
-            dispatch(isLoggedIn(false));
-            navigate("/login");
-            toast.error(`Error logging out: ${error.message}`);
+            dispatch(isLoggedIn(false))
+            navigate("/login")
+            toast.error(`User logged out!`)
           }
         } else {
-          dispatch(isLoggedIn(false));
-          navigate("/login");
-          toast.error(`${error.response.data.message}`);
+          dispatch(isLoggedIn(false))
+          navigate("/login")
+          toast.error(`${error.response.data.message}`)
         }
       },
     });
@@ -56,8 +56,20 @@ const Settings = () => {
           dispatch(setPfp(response.data.pfpUrl))
           toast.success(response.data.message)
         },
-        onError:(error)=>{
-          console.log(error.response.data.message)
+        onError:async(error,formData)=>{
+          if (error.response.status == 401) {
+            try {
+              await refreshUserToken()
+              uploadProfileImg(formData)
+            } catch (error) {
+              dispatch(isLoggedIn(false))
+              navigate("/login")
+              toast.error(`User logged out!`)
+              
+            }
+          }
+
+        toast.error(`${error.response.data.message}`)
         }
     })
 
@@ -70,7 +82,7 @@ const Settings = () => {
       formData.append("pfp", image)
       uploadProfileImg(formData)
     }
-    console.log(user.pfp)
+   
   return (
     <div className="flex">
     <LeftSideBar/>

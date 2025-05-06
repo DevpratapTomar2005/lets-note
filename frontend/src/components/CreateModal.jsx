@@ -34,9 +34,9 @@ const CreateModal = () => {
         },
         onSuccess:(response)=>{
             dispatch(setTodos(response.data.todo))
-            toast.success(`${response.data.message}`)
             setTimeout(()=>{
               dispatch(setShowCreateModal(false))
+              
             },1800)
             
         },

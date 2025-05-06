@@ -21,12 +21,11 @@ const {mutate:completeTodo}=useMutation({
     dispatch(setTodoCompletion({id:response.data.id,completed:response.data.completed}))
     
   },
-  onError:async(error,completed)=>{
+  onError:async(error,id,completed)=>{
     if(error.response.status==401){
      try {
        await refreshUserToken()
-       await taskCompleted(todo._id,completed)
-         dispatch(setTodoCompletion({id:response.data.id,completed:response.data.completed}))
+        completeTodo({id,completed})
        
        
      } catch (error) {
@@ -46,7 +45,7 @@ const {mutate:completeTodo}=useMutation({
  completeTodo({id,completed})
  }
 
- const {mutate}=useMutation({
+ const {mutate:todoDeletion}=useMutation({
   mutationFn: async(id)=>{
     
     return await deleteTodo(id)
@@ -57,26 +56,24 @@ const {mutate:completeTodo}=useMutation({
    
     
   },
-  onError:async(error)=>{
+  onError:async(error,id)=>{
     if (error.response.status == 401) {
-            await refreshUserToken()
-              .then(
-                await deleteTodo(todo._id).then((response)=>{
-                  dispatch(deleteStoreTodo(response.todo.id))
-                  
+          try {
+              await refreshUserToken()
+               todoDeletion(id)
+          } catch (error) {
+            
+        
+              dispatch(isLoggedIn(false)),
+              navigate("/login"),
+              toast.error(`Logged out successfully!`)
+           
+          }
                 
-                }   
-                ).catch(
-                  (error)=>{
-                    toast.error('Error in deleting todo!')
-                  }
-                )
-              )
-              .catch(
-                dispatch(isLoggedIn(false)),
-                navigate("/login"),
-                toast.error(`Logged out successfully!`)
-              );
+              
+          }
+          else {
+              toast.error(`${error.response.data.message}`)
           }
   }
  })
@@ -84,7 +81,7 @@ const {mutate:completeTodo}=useMutation({
  
  const deleteTodoHandler=(todoid)=>{
   
-  mutate(todoid)
+  todoDeletion(todoid)
  }
  
  
