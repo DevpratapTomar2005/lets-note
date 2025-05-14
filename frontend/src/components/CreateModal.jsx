@@ -37,7 +37,7 @@ const CreateModal = () => {
             setTimeout(()=>{
               dispatch(setShowCreateModal(false))
               
-            },1800)
+            },400)
             
         },
         onError:async(error,data)=>{
@@ -108,19 +108,19 @@ const CreateModal = () => {
 }
 
   return (
-    <>
+    <div>
       <div
         className={`fixed z-10 w-1/3 bg-white shadow-2xl rounded-lg ${
           wantNotification === true ? `${task==="notes"?("top-[25%]"):("top-[12%]")}` : `${task==="notes"?("top-[25%]"):("top-[18%]")}`
-        } right-[32%] border-2  border-black px-8 py-4`}
+        } right-[32%] border-2  border-neutral-500 px-8 py-4`}
       >
-        <label htmlFor="selectTasks" className="text-xl font-medium">
+        <label htmlFor="selectTasks" className="text-xl text-neutral-700 font-medium">
           Create:{" "}
         </label>
         <select
           name="selectTasks"
           id="selectTasks"
-          className="outline-1 py-1 rounded outline-black focus:outline-black"
+          className="outline-2 text-neutral-700 ml-2  py-1 rounded outline-neutral-700 focus:outline-neutral-600"
           onChange={(e) => setTask(e.target.value)}
         >
           <option value="todo">Todo</option>
@@ -129,7 +129,7 @@ const CreateModal = () => {
         {task === "todo" ? (
           <div className="flex flex-col gap-8 mt-8">
             <div>
-              <label htmlFor="title" className="text-lg font-medium">
+              <label htmlFor="title" className="text-lg text-neutral-700 font-medium">
                 Task:{" "}
               </label>
               <input
@@ -139,31 +139,31 @@ const CreateModal = () => {
                 onChange={(e) => {
                   setTodoTask(e.target.value);
                 }}
-                className="p-2 text-md outline-1 rounded outline-black focus:outline-black w-full my-2"
+                className="p-2 text-md outline-2 text-neutral-800 rounded outline-neutral-700 focus:outline-neutral-600 w-full my-2"
               />
             </div>
             <div>
-              <label htmlFor="dueDate" className="text-lg font-medium">
+              <label htmlFor="dueDate" className="text-lg text-neutral-700 font-medium">
                 Due Date:{" "}
               </label>
               <input
                 type="date"
                 name="dueDate"
                 id="dueDate"
-                className="outline-1 p-1 rounded outline-black focus:outline-black"
+                className="outline-2 p-1 rounded outline-neutral-700 focus:outline-neutral-600"
                 onChange={(e) => {
                   setDueDate(e.target.value);
                 }}
               />
             </div>
             <div>
-              <label htmlFor="selectNotifyMe" className="text-lg font-medium">
+              <label htmlFor="selectNotifyMe" className="text-lg text-neutral-700 font-medium">
                 Notify Me:{" "}
               </label>
               <select
                 name="selectNotifyMe"
                 id="selectNotifyMe"
-                className="outline-1 py-1 rounded outline-black focus:outline-black"
+                className="outline-2 py-1 rounded outline-neutral-700 focus:outline-neutral-600"
                 onChange={(e) => setWantNotification(JSON.parse(e.target.value))}
               >
                 <option value={true}>Yes</option>
@@ -175,7 +175,7 @@ const CreateModal = () => {
               <div>
                 <label
                   htmlFor="notificationTime"
-                  className="text-lg font-medium"
+                  className="text-lg text-neutral-700 font-medium"
                 >
                   Notification Time:{" "}
                 </label>
@@ -184,7 +184,7 @@ const CreateModal = () => {
                   name="notificationTime"
                   id="notificationTime"
                 
-                  className="outline-1 p-1 rounded outline-black focus:outline-black"
+                  className="outline-2 p-1 rounded text-neutral-800 outline-neutral-700"
                   onChange={(e) => {
                     setNotificationTime(e.target.value);
                   }}
@@ -196,7 +196,7 @@ const CreateModal = () => {
           </div>
         ) : (
           <div className="mt-5">
-            <label htmlFor="title" className="text-lg font-medium">
+            <label htmlFor="title" className="text-lg text-neutral-700 font-medium">
               Title:{" "}
             </label>
             <input
@@ -206,7 +206,7 @@ const CreateModal = () => {
               onChange={(e) => {
                 setNoteTitle(e.target.value);
               }}
-              className="p-2 text-md outline-1 rounded outline-black focus:outline-black w-full "
+              className="p-2 text-md outline-2 rounded text-neutral-800 outline-neutral-700 focus:outline-neutral-600 w-full "
             />
           </div>
         )}
@@ -227,7 +227,7 @@ const CreateModal = () => {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

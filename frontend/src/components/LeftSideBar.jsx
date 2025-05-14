@@ -12,18 +12,20 @@ const LeftSideBar = () => {
   const dispatch=useDispatch()
   return (
     <div className="flex flex-col justify-between w-16 fixed shadow-right h-[calc(100vh-16px)] top-[2.74rem]">
-      <div className="top flex flex-col gap-5 p-2">
+      <div className="top flex flex-col gap-2 p-2">
       <div className="create bg-blue-500 p-3 rounded-lg hover:bg-blue-400" onClick={()=>dispatch(setShowCreateModal(true))}>
       <img className="m-auto w-[26px]" src={Plus} alt="create" />
       </div>
       <div className="todos transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
-        <Link to={'/todos'}>
+        <Link to={'/todos'} className='flex flex-col gap-1 items-center text-[14px]'>
       <img className="m-auto w-[28px]" src={Todo} alt="Todos" />
+        <div className='text-center text-gray-500 w-fit'>Todos</div>
         </Link>
       </div>
       <div className="notes transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
-      <Link to={'/notes'}>
+      <Link to={'/notes'} className='flex flex-col gap-1 items-center text-[14px]'>
       <img className="m-auto w-[28px]" src={Note} alt="Notes" />
+      <div className='text-center text-gray-500  w-fit'>Notes</div>
       </Link>
       </div>
       <div onClick={()=>dispatch(setShowChatBot(true))} className="chat-bot transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">

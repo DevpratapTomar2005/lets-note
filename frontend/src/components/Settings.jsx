@@ -1,5 +1,5 @@
 
-import LeftSideBar from "./LeftSideBar"
+
 import { useSelector } from "react-redux"
 import CreateModal from "./CreateModal"
 import Avatar from 'react-avatar'
@@ -11,6 +11,7 @@ import {setPfp} from "../slices/userSlice"
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import editButton from "../assets/icons and logos/edit.svg"
+import AiChatbot from "./AiChatbot";
 const Settings = () => {
     const showCreateModal = useSelector(state => state.showCreateModal.value)
     const user=useSelector(state=>state.user)
@@ -84,8 +85,8 @@ const Settings = () => {
     }
    
   return (
-    <div className="flex">
-    <LeftSideBar/>
+    <>
+ 
     <div className="h-[calc(90vh+16px)] relative w-full top-[2.74rem] ml-20">
     {showCreateModal && <CreateModal />}
     <div className="w-full h-full flex justify-center items-center">
@@ -115,7 +116,10 @@ const Settings = () => {
       </div>
     </div>
     </div>
+    <div>
+          <AiChatbot/>
     </div>
+    </>
   )
 }
 

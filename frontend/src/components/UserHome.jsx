@@ -2,7 +2,8 @@
 
 import LeftSideBar from "../components/LeftSideBar";
 import Dashboard  from "../components/Dashboard";
-import AiChatbot from "./AiChatbot";
+
+
 function UserHome() {
 
   return (
@@ -10,7 +11,7 @@ function UserHome() {
       <div className="flex">
         <LeftSideBar/>
         <Dashboard/>
-        <AiChatbot/>
+     
       </div>
       
     

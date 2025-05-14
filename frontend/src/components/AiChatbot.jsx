@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState,useRef } from "react"
 import { useSelector,useDispatch } from "react-redux"
 import { setShowChatBot } from '../slices/showChatBotSlice'
 import chatbotAiImg from '../assets/icons and logos/chatbotAiImg.svg'
@@ -10,15 +10,17 @@ import { isLoggedIn } from "../slices/loginSlice.js"
 import { toast } from "react-toastify";
 import {useMutation} from '@tanstack/react-query'
 import { setTodos,setTodoCompletion,deleteStoreTodo } from "../slices/userSlice.js"
+import aiLoading from '../assets/illustrations/aiLoading.gif'
+
 function AiChatbot() {
     const showChatBot=useSelector((state)=>state.showChatBot.showChatBot)
     const fcmToken=useSelector((state)=>state.user.fcmToken)
     const [prompt,setPrompt]=useState("")
-    
+    const aiButttonRef=useRef()
     const dispatch=useDispatch()
     const navigate=useNavigate()
 
-    const {mutate:promptAiMutation}=useMutation({
+    const {mutate:promptAiMutation, isPending:aiPromptPending}=useMutation({
       mutationFn:async({message,fcmToken})=>{
           return await promptAi(message,fcmToken)
       },
@@ -83,7 +85,7 @@ function AiChatbot() {
       responseDiv.id="responseDiv"
       responseDiv.className="flex flex-col"
       responseDiv.innerHTML=`
-       <div class="self-start bg-gray-500 text-white py-2 px-3 text-[15px] rounded-b-lg rounded-r-lg my-1" >
+       <div class="self-start bg-gray-500 max-w-[295px] text-white py-2 px-3 text-[15px] rounded-b-lg rounded-r-lg my-1" >
        ${message}
        </div>
       `
@@ -99,7 +101,7 @@ function AiChatbot() {
         promptDiv.id="promptDiv"
         promptDiv.className="flex flex-col"
         promptDiv.innerHTML=`
-         <div class="self-end bg-purple-500 text-white py-2 px-3 text-[15px] rounded-t-lg rounded-l-lg my-1" >
+         <div class="self-end bg-purple-500 max-w-[295px] text-white py-2 px-3 text-[15px] rounded-t-lg rounded-l-lg my-1" >
          ${message}
          </div>
         `
@@ -112,9 +114,14 @@ function AiChatbot() {
 
       }
     }
+    const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      aiButttonRef.current.click(); 
+    }
+  };
   return (
-    <div className={`h-[calc(100vh-3.24rem)] flex flex-col justify-between w-[600px] border-l-2 border-t-2 rounded-tl-md border-purple-300 shadow-[-4px_-1px_15px_rgba(0,0,0,0.1)] mt-2 relative z-10 top-[2.74rem] transition-all duration-200   ease-out ${(showChatBot)?("translate-x-0"):("translate-x-[105%] hidden ")}`}>
-     <div className="flex justify-between items-center text-lg font-semibold bg-blue-500 text-white p-2 rounded-tl">
+    <div className={`h-[calc(100vh-3.24rem)] bg-white flex flex-col justify-between w-[500px]  border-2 rounded-md border-purple-300 shadow-[-4px_-1px_15px_rgba(0,0,0,0.1)] absolute z-10 top-[2.90rem] transition-all duration-200   ease-out ${(showChatBot)?("-translate-x-126"):("translate-x-[105%] hidden ")}`}>
+     <div className="flex justify-between items-center text-lg font-semibold bg-blue-500 shadow-md shadow-gray-300 text-white p-2 rounded-t-[6px]">
       <div className="flex gap-1">
       Note AI 
       <img src={chatbotAiImg} alt="Ai img" />
@@ -126,7 +133,13 @@ function AiChatbot() {
      <div>
      </div>
      <div id="messageCont" className="h-[calc(100vh-14rem)] bg-white flex flex-col overflow-auto px-2">
-     
+     {
+      aiPromptPending?(
+        <div><img src={aiLoading} className="w-[40px]" alt="loading" /></div>
+      ):(
+        null
+      )
+     }
     </div>
 
 
@@ -135,10 +148,11 @@ function AiChatbot() {
          <textarea  className="chat-input text-purple-500 bg-white"
         placeholder="Type your message..."
         value={prompt}
+        onKeyDown={(e)=>handleKeyDown(e)}
         onChange={(e)=>setPrompt(e.target.value)}
         rows={3}></textarea>
       </div>
-        <div onClick={()=>sendPrompt(prompt)} className="absolute z-10  bg-purple-500 hover:bg-purple-600 p-2 rounded-md bottom-4 right-5"><img src={send} alt="send" /></div>
+        <div ref={aiButttonRef} onClick={()=>sendPrompt(prompt)} className="absolute z-10  bg-purple-500 hover:bg-purple-600 p-2 rounded-md bottom-4 right-5"><img src={send} alt="send" /></div>
      </div>
 
     </div>

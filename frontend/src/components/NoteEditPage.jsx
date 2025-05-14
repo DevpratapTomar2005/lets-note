@@ -20,12 +20,14 @@ import { setJoinedRoom } from "../slices/roomJoinSlice";
 import cross from "../assets/icons and logos/cross.svg";
 import send from "../assets/icons and logos/send.svg";
 import { setTodos,setTodoCompletion,deleteStoreTodo } from "../slices/userSlice.js"
+import chatGif from "../assets/illustrations/chatGif.gif"
+import aiLoading from '../assets/illustrations/aiLoading.gif'
 const NoteEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [roomID, setRoomID] = useState("");
   const [roomName, setRoomName] = useState("");
-  
+  const aiButtonRef=useRef()
   const notes = useSelector((state) => state.user.notes);
   const { noteId } = useParams();
   const note = notes.filter((n) => n._id == noteId)[0];
@@ -36,7 +38,7 @@ const NoteEditPage = () => {
   const [showAiBox,setShowAiBox]=useState(false)
   const [prompt,setPrompt]=useState("")
   const socketRef = useRef(null)
- 
+  
   const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
       return await updateNote({ id, content });
@@ -103,7 +105,7 @@ const NoteEditPage = () => {
     });
   };
 
-  const {mutate:promptAiMutation}=useMutation({
+  const {mutate:promptAiMutation,isPending:aiPromptPending}=useMutation({
     mutationFn:async({message,fcmToken})=>{
         return await promptAi(message,fcmToken)
     },
@@ -168,7 +170,7 @@ const NoteEditPage = () => {
     responseDiv.id="responseDiv"
     responseDiv.className="flex flex-col"
     responseDiv.innerHTML=`
-     <div class="self-start bg-gray-500 text-white py-2 px-3 text-[15px] rounded-b-lg rounded-r-lg my-1" >
+     <div class="self-start bg-gray-500 max-w-[295px] text-white py-2 px-3 text-[15px] rounded-b-lg rounded-r-lg my-1" >
      ${message}
      </div>
     `
@@ -184,7 +186,7 @@ const NoteEditPage = () => {
       promptDiv.id="promptDiv"
       promptDiv.className="flex flex-col"
       promptDiv.innerHTML=`
-       <div class="self-end bg-purple-500 text-white py-2 px-3 text-[15px] rounded-t-lg rounded-l-lg my-1" >
+       <div class="self-end bg-purple-500 max-w-[295px] text-white py-2 px-3 text-[15px] rounded-t-lg rounded-l-lg my-1" >
        ${message}
        </div>
       `
@@ -264,11 +266,15 @@ useEffect(()=>{
     }
   };
 })
-
+const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      aiButtonRef.current.click(); 
+    }
+  };
 
   return (
     <div className="relative top-[2.74rem]">
-      <div className="flex justify-between items-center bg-white border-b-1 border-gray-300 py-1 px-3 h-13">
+      <div className="flex justify-between items-center bg-white border-b-2 border-gray-200 py-1 px-3 h-13">
         <div className="text-gray-600 text-lg">Title: {note.title}</div>
         <div className="flex items-center gap-2">
           <span onClick={()=>setShowAiBox(true)} className="bg-gradient-to-r from-pink-400 to-violet-500 p-2 flex items-center gap-1 text-white rounded-3xl text-[16px] cursor-pointer hover:bg-purple-600">
@@ -306,17 +312,24 @@ useEffect(()=>{
                  </div>
               </div>
               <div id="messageCont" className="h-[calc(100vh-17rem)]  bg-white flex flex-col overflow-auto px-2 break-keep">
-     
+                {
+                  aiPromptPending?(
+                    <div className="my-2"><img src={aiLoading} className="w-[40px]" alt="loading" /></div>
+                  ):(
+                    null
+                  )
+                }
               </div>
                <div className="h-[100px] max-w-[100%] mx-3 border-2 border-purple-300 my-2 rounded-lg">
                     <div className="relative">
                        <textarea  className="chat-input text-purple-500 bg-white "
                       placeholder="Type your message..."
                       value={prompt}
+                      onKeyDown={(e)=>handleKeyDown(e)}
                       onChange={(e)=>setPrompt(e.target.value)}
                       rows={3}></textarea>
                     </div>
-                      <div onClick={()=>sendPrompt(prompt)} className="absolute z-10  bg-purple-500 hover:bg-purple-600 p-2 rounded-md bottom-4 right-5"><img src={send} alt="send" /></div>
+                      <div ref={aiButtonRef} onClick={()=>sendPrompt(prompt)} className="absolute z-10  bg-purple-500 hover:bg-purple-600 p-2 rounded-md bottom-4 right-5"><img src={send} alt="send" /></div>
                    </div>
               
           </div>
@@ -324,13 +337,16 @@ useEffect(()=>{
 
           ):(
             (!joinedRoom && !socketRef.current)?(
-              <div className="flex flex-col items-center justify-center h-[calc(100vh-7rem)]  mx-auto max-w-[370px] min-w-[300px] bg-white border-1 border-purple-600 rounded-[9px] gap-3">
+              <div className="flex flex-col items-center justify-center h-[calc(100vh-7rem)]  mx-auto max-w-[370px] min-w-[300px] bg-white border-2 border-purple-300 rounded-[9px] gap-3">
+               
+                <img src={chatGif} className="w-[300px]" alt="chat img" />
+               
               <input
                 type="text"
                 name="roomID"
                 placeholder="Enter or generate room id"
                 value={roomID}
-                className="outline-1 rounded p-2 w-[74%] text-sm"
+                className="outline-2 outline-purple-400 text-purple-600 hover:outline-purple-500 rounded p-2 w-[74%] text-sm"
                 onChange={(e) => setRoomID(e.target.value)}
               />
               <input
@@ -338,17 +354,20 @@ useEffect(()=>{
                 name="roomName"
                 placeholder="Enter room name"
                 onChange={(e) => setRoomName(e.target.value)}
-                className="outline-1 rounded p-2 w-[74%] text-sm"
+                className="outline-2 text-purple-600 rounded outline-purple-400 hover:outline-purple-500 p-2 w-[74%] text-sm"
               />
+              <div className="flex gap-3">
+
               <button
-                className="bg-purple-600 text-white py-2 px-3 rounded hover:bg-purple-500"
+                className="bg-purple-500 text-white py-2 px-3 text-sm rounded hover:bg-purple-600"
                 onClick={() => createRoomID()}
               >
                 Create Room
               </button>
-              <button className="bg-green-600 text-white py-2 px-3 rounded hover:bg-green-700" onClick={()=> joinRoom()}>
+              <button className="bg-green-600 text-white text-sm py-2 px-3 rounded hover:bg-green-700" onClick={()=> joinRoom()}>
                 Join Room
               </button>
+              </div>
             </div>
             ):(
               <CollaborateChatRoom socketRef={socketRef} roomID={roomID} roomName={roomName} userFullName={userFullName}/>
@@ -364,7 +383,7 @@ useEffect(()=>{
           <Editor
             apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
             value={content}
-        
+      
             init={{
               height: "100%",
               branding: false,

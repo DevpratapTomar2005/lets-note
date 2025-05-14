@@ -15,7 +15,7 @@ const createTodo=async(req,res)=>{
      }
      const newTodo={
         title:todoData.title,
-        dueDate:todoData.dueDate,
+        dueDate:todoData.dueDate || new Date(),
         notifyMe:todoData.notifyMe,
         notificationTime:todoData.notificationTime,
         completed:false
@@ -23,7 +23,8 @@ const createTodo=async(req,res)=>{
     user.todos.push(newTodo)
     await user.save({validateBeforeSave:false})
     const savedTodo = user.todos[user.todos.length - 1];
-    if(todoData.notifyMe && todoData.deviceToken){
+    
+    if(todoData.notifyMe && todoData.notificationTime && todoData.deviceToken){
         const scheduledDate = new Date(`${todoData.dueDate} ${todoData.notificationTime}`)
         try {
             const job=schedule.scheduleJob(scheduledDate,async()=>{
@@ -192,7 +193,7 @@ const makeTodoDeclaration= {
         },
         notificationTime: {
           type: Type.STRING,
-          description: 'The time of the notification in HH:MM format (eg, "14:30") user may have provided H:M format convert it to HH:MM format. if user wants to ask for want notification or schedule but not mentioned time then ask for it ',
+          description: 'The time of the notification in HH:MM format (eg, "14:30") user may have provided H:M format convert it to HH:MM format. if user wants notification or schedule but not mentioned time then ask for it and if user deny to want notification then do not ask',
         },
       },
       required: ['title', 'dueDate', 'wantNotification', 'notificationTime'],
@@ -233,15 +234,15 @@ const deleteTodoDeclaration={
     },
   }
 
-
-let chatHistory=[];
+const systemPrompt='You are an ai assistant for a web app which helps user in writting content, helping them in managing todos by providing the functionality of creating deleting and set the todo completion status with the help of tools provided to you. you will be provided with a message and you have to respond with a message in the same language. you have to respond in the same language as the message is in. You will generate the content normally but when user asks to create, delete or set complete status of todos then only you will call the tools.'
+let chatHistory=[{role:'user',parts:[{text:systemPrompt}]}];
 
 const aiAgent=async(req,res)=>{
     const {message,fcmToken}=req.body
    
   
+    chatHistory.push({role:'user',parts:[{ text:message }]})
     try {
-        chatHistory.push({role:'user',parts:[{ text:message }]})
         const response = await ai.models.generateContent({
             model: 'gemini-2.0-flash',
             contents: chatHistory,
@@ -250,6 +251,7 @@ const aiAgent=async(req,res)=>{
                 tools: [{
                     functionDeclarations: [makeTodoDeclaration,deleteTodoDeclaration,completeTodoDeclaration],
                   }],
+
             }
             
           });

@@ -7,33 +7,27 @@ const Navbar = () => {
   
   return (
     <>
-    <nav className={(!isLogged)?("w-full flex bg-purple-600 text-white justify-between p-4"):("w-full flex bg-purple-600 text-white justify-between p-1 items-center fixed z-10")}>
+    <nav className={(!isLogged)?("w-full flex bg-transparent text-white justify-between items-center px-4 py-2 absolute z-10"):("w-full flex bg-purple-600 text-white justify-between p-1 items-center fixed z-10")}>
        {
         (!isLogged)?(
           <>
           <div><NavLink to="/">LOGO</NavLink></div>
        
-          <ul className="flex gap-2">
+          <ul className="flex gap-7 text-[17px] ml-15">
               <li className="px-1 mx-1 hover:font-medium"><NavLink to="/">Home</NavLink></li>
-              <li className="px-1 mx-1 hover:font-medium"><NavLink to="/features">Features</NavLink></li>
               <li className="px-1 mx-1 hover:font-medium"><NavLink to="/about">About Us</NavLink></li>
               <li className="px-1 mx-1 hover:font-medium"><NavLink to="/contact">Contact</NavLink></li>
           </ul>
    
-            <div className="flex gap-4">
-                <button><NavLink to="/login">Login</NavLink></button>
-                <button><NavLink to="/registration">Sign Up</NavLink></button>
+            <div className="flex  gap-3">
+                <button className="text-[17px]"><NavLink to="/login">Login</NavLink></button>
+                <button className="bg-white text-purple-800 hover:text-purple-600 text-[17px] font-semibold p-2 rounded-full"><NavLink to="/registration">Sign Up</NavLink></button>
             </div>
           </>
         ):(
           <>
           <div className="mx-10"><NavLink to="/">LOGO</NavLink></div>
 
-          <ul className="flex gap-10">
-          <li className="px-1 mx-1 hover:font-medium"><NavLink to="/">Home</NavLink></li>
-          <li className="px-1 mx-1 hover:font-medium"><NavLink to="/todos">Todos</NavLink></li>
-          <li className="px-1 mx-1 hover:font-medium"><NavLink to="/notes">Notes</NavLink></li>
-      </ul>
 
           <div className="flex gap-1 bg-purple-800 rounded-md p-1 items-center cursor-pointer hover:bg-purple-400">
             <div className="font-medium text-[13px]">

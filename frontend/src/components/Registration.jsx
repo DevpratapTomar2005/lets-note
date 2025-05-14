@@ -1,4 +1,4 @@
-import signUpIllustration from "../assets/illustrations/signup_illustration.mp4";
+import signup from "../assets/illustrations/register.svg"
 import loadingDot from "../assets/icons and logos/loading dots.gif";
 import google_logo from "../assets/icons and logos/google_logo.svg";
 import openEye from "../assets/icons and logos/eye_open.svg"
@@ -48,10 +48,13 @@ const registerUser=(data)=>{
 }
 
   return (
-    <div className="container border mx-auto w-3/4 my-3 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-white">
+    <div className=" w-full pb-6 hero-gradient overflow-hidden flex flex-col items-center scroll-smooth">
+
+
+    <div className="container border-3 border-white mx-auto w-3/4 mt-15 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500">
       <div className="w-1/2 h-full flex  flex-col items-center justify-center  ">
         <span>
-          <h1 className="font-roboto text-center text-purple-800 font-bold text-4xl mt-3">
+          <h1 className="font-roboto text-center text-white font-bold text-5xl mt-3">
             Signup
           </h1>
         </span>
@@ -60,28 +63,28 @@ const registerUser=(data)=>{
             onSubmit={handleSubmit(registerUser)}
             className="flex flex-col "
           >
-            <label htmlFor="fullname" className="text-purple-950 text-[15px]">
+            <label htmlFor="fullname" className="text-white text-[15px]">
               Fullname:
             </label>
             <input
               type="fullname"
               id="fullname"
               name="fullname"
-              className="mb-2 outline-2 rounded outline-purple-500 py-2 px-2 text-purple-900 focus:outline-purple-800"
+              className="mb-2 outline-2 rounded outline-purple-300 py-2 px-2 text-purple-300 focus:outline-purple-400"
               {...register("fullname", { required: true })}
               required={true}
             />
             {errors.fullname && (
               <p className="text-red-500 text-sm">{errors.fullname.message}</p>
             )}
-            <label htmlFor="email" className="text-purple-950 text-[15px]">
+            <label htmlFor="email" className="text-white text-[15px]">
               Email:
             </label>
             <input
               type="email"
               id="email"
               name="email"
-              className="mb-2 outline-2 rounded outline-purple-500 py-2  px-2 text-purple-900 focus:outline-purple-800"
+              className="mb-2 outline-2 rounded outline-purple-300 py-2  px-2 text-purple-300 focus:outline-purple-400"
               {...register("email", {
                 required: true,
                 validate: {
@@ -96,7 +99,7 @@ const registerUser=(data)=>{
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
-            <label htmlFor="password" className="text-purple-950 text-[15px]">
+            <label htmlFor="password" className="text-white text-[15px]">
               Password:
             </label>
             <span className="flex items-center gap-2">
@@ -105,7 +108,7 @@ const registerUser=(data)=>{
               id="password"
               name="password"
               
-              className="mb-2 outline-2 rounded outline-purple-500 py-2  px-2 text-purple-900 focus:outline-purple-800 w-[90%]"
+              className="mb-2 outline-2 rounded outline-purple-300 py-2  px-2 text-purple-300 focus:outline-purple-400 w-[90%]"
               {...register("password", {
                 required: true,
                 validate: {
@@ -117,7 +120,7 @@ const registerUser=(data)=>{
                 })}
                 required={true}
                 />
-                <span className="cursor-pointer mx-auto border-2 rounded border-purple-500 p-2 mb-2" onClick={()=>setShow(!show)}>
+                <span className="cursor-pointer mx-auto border-2 rounded border-purple-300 p-2 mb-2" onClick={()=>setShow(!show)}>
                   <img src={show?closeEye:openEye} alt="password eye" />
                 </span>
                 </span>
@@ -126,7 +129,7 @@ const registerUser=(data)=>{
             )}
             <label
               htmlFor="confpassword"
-              className="text-purple-950 text-[15px]"
+              className="text-white text-[15px]"
             >
               Confirm Password:
             </label>
@@ -134,12 +137,12 @@ const registerUser=(data)=>{
               type={show?"text":"password"}
               id="confpassword"
               name="confpassword"
-              className="mb-2 outline-2 rounded outline-purple-500 py-2 px-2 text-purple-900 focus:outline-purple-800"
+              className="mb-2 outline-2 rounded outline-purple-300 py-2 px-2 text-purple-300 focus:outline-purple-400"
               {...register("confpassword", { required: true })}
               required={true}
             />
 
-            <span className="text-sm">
+            <span className="text-sm text-white">
               Already have an account?
               <button className="underline mx-1 font-bold">
                 <Link to="/login">Login</Link>
@@ -156,18 +159,19 @@ const registerUser=(data)=>{
               )}
             </button>
           </form>
-          <div className="text-sm text-center">Or</div>
+          <div className="text-sm text-center text-white">Or</div>
           <div className="flex justify-center my-1">
-            <button className="p-3 rounded border flex items-center gap-2 cursor-pointer">
-              <img src={google_logo} alt="google logo" className="size-6" />
+            <button className="p-3 rounded border-2 border-white text-white flex items-center gap-2 cursor-pointer">
+              <img src={google_logo} alt="google logo" className="size-6 invert" />
               Continue With Google
             </button>
           </div>
         </div>
       </div>
       <div className="signup-video-cont w-123 h-full flex items-center">
-        <video src={signUpIllustration} autoPlay muted loop></video>
+       <img src={signup} alt="signup img" />
       </div>
+    </div>
     </div>
   );
 };

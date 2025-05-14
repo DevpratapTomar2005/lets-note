@@ -6,6 +6,7 @@ import { requestFCMToken } from "../services/firebase";
 import { useEffect } from "react";
 import Todo from '../components/Todo.jsx'
 import Note from '../components/Note.jsx'
+import AiChatbot from "./AiChatbot";
 const Dashboard = () => {
   const showCreateModal = useSelector(state => state.showCreateModal.value)
   const todos=useSelector(state=>state.user.todos)
@@ -24,9 +25,10 @@ const Dashboard = () => {
   
   let currentMonth=new Date().getMonth()+1
   return (
-    <div className="h-[calc(90vh+16px)] bg-white relative w-full top-[2.74rem] ml-20">
+    <>
+    <div className="h-[calc(90vh+16px)] bg-white relative w-full min-w-fit top-[2.74rem] ml-20">
       {showCreateModal && <CreateModal />}
-      <div className="upcoming-tasks my-12 mx-22">
+      <div className="upcoming-tasks my-12  mx-15">
         <div className="flex items-center">
           <span className="text-gray-500 font-roboto text-3xl">Upcoming Tasks</span>
           
@@ -43,14 +45,14 @@ const Dashboard = () => {
               }
             })
           ):(
-            <span className="text-gray-500 font-roboto text-sm">No Upcoming Tasks</span>
+            <span className="text-gray-400 font-roboto text-md mt-5 mx-auto">No Upcoming Tasks.</span>
           )
          
         }
         
       </div>
       </div>
-      <div className="recent-notes my-7 mx-22">
+      <div className="recent-notes my-7 mx-15">
         <div className="flex items-center">
           <span className="text-gray-500 font-roboto text-3xl">Recent Notes</span>
           
@@ -67,7 +69,7 @@ const Dashboard = () => {
               }
             })
           ):(
-            <span className="text-gray-500 font-roboto text-sm">No Recent Notes</span>
+            <span className="text-gray-400 font-roboto text-md mt-5 mx-auto">No Recent Notes.</span>
           )
          
          
@@ -77,7 +79,10 @@ const Dashboard = () => {
       </div>
 
     </div>
-    
+    <div>
+      <AiChatbot/>
+    </div>
+    </>
   );
 };
 

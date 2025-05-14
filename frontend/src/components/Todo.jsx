@@ -92,7 +92,7 @@ const {mutate:completeTodo}=useMutation({
 
         <div className="flex gap-2">
         <input type="checkbox" name="taskCheck" id="taskCheck" defaultChecked={(todo.completed)?true:false} onChange={()=>onCheckHandler(todo._id,!todo.completed)} className="accent-purple-500 w-[18px]" />
-        <span className="text-purple-600 w-[200px]"><h2 className={todo.completed?'line-through': null}>{todo.title}</h2></span>
+        <span className="text-purple-600 font-medium w-[200px]"><h2 className={todo.completed?'line-through': null}>{todo.title}</h2></span>
         </div>
         <div className='p-1 hover:bg-gray-100 rounded-full' onClick={()=>deleteTodoHandler(todo._id)}>
           <img src={deleteTodoImg} className='w-[22px] opacity-[0.8]' alt="delete" />

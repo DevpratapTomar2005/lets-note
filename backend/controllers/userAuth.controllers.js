@@ -37,11 +37,13 @@ const userRegister = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000 
       })
       .cookie("max_session_token", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000 
       })
       .json({ message: "User registered successfully!",user:{fullname:user.fullname,email:user.email,pfp:user.pfpUrl} });
   } catch (error) {
@@ -76,11 +78,13 @@ const userLogin = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000 
       })
       .cookie("max_session_token", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000 
       })
       .json({ message: "User logged in successfully!",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes,pfp:user.pfpUrl} });
   } catch (error) {
@@ -140,6 +144,8 @@ const refreshUserToken = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000 
+        
       })
       .json({ message: "Token refreshed successfully!" });
   } catch (error) {

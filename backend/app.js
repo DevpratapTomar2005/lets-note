@@ -43,14 +43,14 @@ io.on("connection", (socket) => {
       rooms[roomId].push({ socketId: socket.id, userFullName, roomName });
     }
 
-    socket.emit(
+    socket.to(roomId).emit(
       "welcome",
-      `Welcome to the room ${roomName} ${userFullName}`,
+      `${userFullName} joined the room`,
       rooms[roomId]
     );
   });
 
-  socket.on("disconnecting-user-accidentaly", (roomId) => {
+  socket.on("disconnecting-user-accidentaly", (roomId,userFullName) => {
     rooms[roomId] = rooms[roomId].filter((user) => user.socketId !== socket.id);
     if (rooms[roomId].length === 0) {
       delete rooms[roomId];
@@ -59,15 +59,17 @@ io.on("connection", (socket) => {
         .to(roomId)
         .emit(
           "user-disconnected",
-          `${socket.id} has left the room`,
-          rooms[roomId]
+          `${userFullName} has left the room`,
+          rooms[roomId],
+          userFullName
+
         );
     }
 
     socket.leave(roomId)
   });
 
-  socket.on("disconnect-user", (roomId) => {
+  socket.on("disconnect-user", (roomId,userFullName) => {
     rooms[roomId] = rooms[roomId].filter((user) => user.socketId !== socket.id)
 
     if (rooms[roomId].length === 0) {
@@ -76,17 +78,20 @@ io.on("connection", (socket) => {
     socket.leave(roomId)
     socket.disconnect()
     console.log(socket.id, "disconnected")
+
     socket
       .to(roomId)
       .emit(
         "user-disconnected",
-        `${socket.id} has left the room`,
-        rooms[roomId]
+        `${userFullName} has left the room`,
+        rooms[roomId],
+        userFullName
       )
   })
 
-  socket.on("send-message", (message, roomId) => {
-    socket.to(roomId).emit("receive-message", message)
+  socket.on("send-message", (message, roomId,userFullName,userPfp) => {
+    
+    socket.to(roomId).emit("receive-message", message,userFullName,userPfp)
   })
 
   socket.on("send-updated-text",(content,roomId)=>{
