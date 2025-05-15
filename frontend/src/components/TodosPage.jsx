@@ -12,9 +12,9 @@ const TodosPage = () => {
     <>
    
       
-      <div className="h-[calc(90vh+16px)] bg-white relative w-full top-[2.74rem] ml-20">
+      <div className="h-[calc(90vh+16px)] bg-white relative w-full top-[2.74rem] todoPage ml-20">
       {showCreateModal && <CreateModal />}
-      <div className=" flex flex-wrap gap-3 mx-4 my-7">
+      <div className=" flex flex-wrap gap-3 mx-4 my-7 todo-cont">
         {
           todos.length==0?(
             <div className="mx-auto my-50 text-gray-400 text-md">No todos available.</div>

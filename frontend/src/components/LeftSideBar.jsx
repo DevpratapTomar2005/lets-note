@@ -11,18 +11,18 @@ import { setShowChatBot } from '../slices/showChatBotSlice'
 const LeftSideBar = () => {
   const dispatch=useDispatch()
   return (
-    <div className="flex flex-col justify-between w-16 fixed shadow-right h-[calc(100vh-16px)] top-[2.74rem]">
-      <div className="top flex flex-col gap-2 p-2">
+    <div className="flex side-bar-mediaq flex-col  justify-between w-16 bg-white fixed shadow-right h-[calc(100vh-16px)] top-[2.74rem]">
+      <div className="top side-bar-content-mediaq flex flex-col gap-2 p-2">
       <div className="create bg-blue-500 p-3 rounded-lg hover:bg-blue-400" onClick={()=>dispatch(setShowCreateModal(true))}>
       <img className="m-auto w-[26px]" src={Plus} alt="create" />
       </div>
-      <div className="todos transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
+      <div className="todosBar transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
         <Link to={'/todos'} className='flex flex-col gap-1 items-center text-[14px]'>
       <img className="m-auto w-[28px]" src={Todo} alt="Todos" />
         <div className='text-center text-gray-500 w-fit'>Todos</div>
         </Link>
       </div>
-      <div className="notes transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
+      <div className="notesBar transition-transform duration-350 ease-in-out hover:bg-gray-100 p-2 rounded-lg">
       <Link to={'/notes'} className='flex flex-col gap-1 items-center text-[14px]'>
       <img className="m-auto w-[28px]" src={Note} alt="Notes" />
       <div className='text-center text-gray-500  w-fit'>Notes</div>

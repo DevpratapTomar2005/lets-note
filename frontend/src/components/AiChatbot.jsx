@@ -120,7 +120,7 @@ function AiChatbot() {
     }
   };
   return (
-    <div className={`h-[calc(100vh-3.24rem)] bg-white flex flex-col justify-between w-[500px]  border-2 rounded-md border-purple-300 shadow-[-4px_-1px_15px_rgba(0,0,0,0.1)] absolute z-10 top-[2.90rem] transition-all duration-200   ease-out ${(showChatBot)?("-translate-x-126"):("translate-x-[105%] hidden ")}`}>
+    <div className={`h-[calc(100vh-3.24rem)] bg-white dash-aichat flex flex-col justify-between w-[500px] border-2 rounded-md border-purple-300 shadow-[-4px_-1px_15px_rgba(0,0,0,0.1)] absolute z-10 top-[2.90rem] transition-all duration-200   ease-out ${(showChatBot)?("-translate-x-126"):("translate-x-[105%] hidden ")}`}>
      <div className="flex justify-between items-center text-lg font-semibold bg-blue-500 shadow-md shadow-gray-300 text-white p-2 rounded-t-[6px]">
       <div className="flex gap-1">
       Note AI 

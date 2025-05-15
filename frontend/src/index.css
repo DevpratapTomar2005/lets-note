@@ -51,6 +51,96 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
   background: radial-gradient(circle, rgba(37, 0, 61, 1) 0%, rgba(18, 18, 18, 1) 40%);
 }
 
+.side-bar-mediaq{
+  @media screen and (max-width: 640px) {
+    flex-direction: row;
+    height: fit-content;
+    width: 100%;
+    position: fixed;
+    z-index: 7;
+    padding:10px;
+    justify-items: center;
+    align-items: center;
+  }
+}
+.side-bar-content-mediaq{
+ @media screen and (max-width: 640px) {
+    flex-direction: row;
+    justify-items: center;
+    height: fit-content;
+    width: 100%;
+    justify-items: center;
+    padding: 0;
+  }
+}
+.create{
+   @media screen and (max-width: 640px) {
+    height: fit-content;
+  }
+}
+.todosBar,.notesBar{
+  @media screen and (max-width: 640px) {
+    height: fit-content;
+  }
+}
+
+.dashboard, .todoPage, .notesPage{
+  @media screen and (max-width: 640px) {
+   margin:0px auto;
+   top:100px;
+   z-index: 0;
+   height: fit-content;
+  }
+}
+
+.todoPage, .notesPage{
+   @media screen and (max-width: 640px) {
+   margin-top:30px;
+   height:fit-content
+  }
+}
+
+.upcoming-tasks, .recent-notes{
+  @media screen and (max-width: 640px) {
+   margin:48px auto;
+  
+  
+  }
+}
+.todo-cont, .notes-cont{
+  @media screen and (max-width: 640px) {
+   margin:28px auto;
+   justify-items: center;
+   justify-content: center;
+ 
+  }
+}
+.upcoming-task-text,.recent-note-text{
+  @media screen and (max-width: 640px) {
+  padding-left: 30px;
+  
+  }
+}
+.dash-aichat{
+   @media screen and (max-width: 520px) {
+  width: 300px;
+  translate: -305px;
+  }
+}
+.settingsPage{
+    @media screen and (max-width: 640px) {
+      margin: 0px auto;
+  
+  }
+}
+.settings-email, .settings-name{
+   @media screen and (max-width: 450px) {
+     width: 300px;
+     font-size: 14px;
+  
+  }
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

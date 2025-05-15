@@ -87,7 +87,7 @@ const Settings = () => {
   return (
     <>
  
-    <div className="h-[calc(90vh+16px)] relative w-full top-[2.74rem] ml-20">
+    <div className="h-[calc(90vh+16px)] relative w-full top-[2.74rem] ml-20 settingsPage">
     {showCreateModal && <CreateModal />}
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-full flex flex-col justify-center items-center gap-10">
@@ -105,10 +105,10 @@ const Settings = () => {
         <input type="file" id="pfpInput" className="hidden" onChange={(e)=>getPfp(e.target.files[0])} />
         </div>
         <div className="flex flex-col gap-5">
-          <div className="bg-purple-50 py-3 px-2  text-lg w-105 border-b-2 border-purple-500 rounded">
+          <div className="bg-purple-50 py-3 px-2  text-lg w-105 border-b-2 border-purple-500 rounded settings-name">
             {user.fullname}
           </div>
-          <div className="bg-purple-50 py-3 px-2  text-lg w-105 border-b-2 border-purple-500 rounded">
+          <div className="bg-purple-50 py-3 px-2  text-lg w-105 border-b-2 border-purple-500 rounded settings-email">
             {user.email}
           </div>
         </div>
