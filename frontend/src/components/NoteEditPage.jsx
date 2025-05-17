@@ -22,6 +22,7 @@ import send from "../assets/icons and logos/send.svg";
 import { setTodos,setTodoCompletion,deleteStoreTodo } from "../slices/userSlice.js"
 import chatGif from "../assets/illustrations/chatGif.gif"
 import aiLoading from '../assets/illustrations/aiLoading.gif'
+import Chat from "../assets/icons and logos/chat.svg"
 const NoteEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const NoteEditPage = () => {
   const { noteId } = useParams();
   const note = notes.filter((n) => n._id == noteId)[0];
   const [content, setContent] = useState(note.content);
+  const [openChat,setOpenChat]=useState(false)
   const userFullName=useSelector(state=>state.user.fullname)
   const joinedRoom = useSelector((state) => state.joinedRoom.joinedRoom);
   const fcmToken=useSelector((state)=>state.user.fcmToken)
@@ -275,9 +277,9 @@ const handleKeyDown = (event) => {
   return (
     <div className="relative top-[2.74rem]">
       <div className="flex justify-between items-center bg-white border-b-2 border-gray-200 py-1 px-3 h-13">
-        <div className="text-gray-600 text-lg">Title: {note.title}</div>
+        <div className="text-gray-600 text-lg note-title"><span>Title:</span> <span>{note.title}</span></div>
         <div className="flex items-center gap-2">
-          <span onClick={()=>setShowAiBox(true)} className="bg-gradient-to-r from-pink-400 to-violet-500 p-2 flex items-center gap-1 text-white rounded-3xl text-[16px] cursor-pointer hover:bg-purple-600">
+          <span onClick={()=>setShowAiBox(true)} className="bg-gradient-to-r from-pink-400 to-violet-500 p-2 flex items-center gap-1 text-white rounded-3xl text-[16px] cursor-pointer w-[55px] hover:bg-purple-600">
            AI<img src={chatbotAiImg} alt="Ai img" />
           </span>
           <button
@@ -296,12 +298,12 @@ const handleKeyDown = (event) => {
       </div>
       
       
-      <div className="flex items-center justify-between ">
-        <div className="w-1/3 mx-2">
+      <div className="flex items-center justify-between editor-chat-cont">
+        <div className={`w-1/3 mx-2 chat-cont ${openChat===true?("disp-block"):(null)} `}>
         {
 
           showAiBox?(
-          <div className="`h-[80vh] flex flex-col justify-between max-w-[370px] min-w-[300px]  border-2 rounded-md border-purple-300 mx-auto  relative">
+          <div className="`h-[80vh] flex flex-col justify-between max-w-[370px] bg-white min-w-[300px]  border-2 rounded-md border-purple-300 mx-auto  relative">
             <div className="flex justify-between items-center text-lg font-semibold bg-blue-500 text-white p-2 rounded-t-sm">
                  <div className="flex gap-1">
                  Note AI 
@@ -321,7 +323,7 @@ const handleKeyDown = (event) => {
                 }
               </div>
                <div className="h-[100px] max-w-[100%] mx-3 border-2 border-purple-300 my-2 rounded-lg">
-                    <div className="relative">
+                    <div className="relative ">
                        <textarea  className="chat-input text-purple-500 bg-white "
                       placeholder="Type your message..."
                       value={prompt}
@@ -379,7 +381,13 @@ const handleKeyDown = (event) => {
         
         }
         </div>
-        <div className="w-2/3 h-[calc(100vh-7rem)] border-gray-300 m-2">
+        <div onClick={()=>setOpenChat(prev=>!prev)} className={`p-2 rounded-full bg-purple-700 text-white chat-btn hidden absolute ${openChat===true?(showAiBox===true?("top-1 opacity-0"):("top-16 right-12")):("bottom-7 left-5")} z-10  shadow-md shadow-gray-400`}>
+          {
+            openChat===false?(<img src={Chat} alt="chat"/>):( <img src={cross} alt="close"/>)
+          }
+         
+        </div>
+        <div className="w-2/3 h-[calc(100vh-7rem)] text-editor border-gray-300 m-2">
           <Editor
             apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
             value={content}
@@ -389,6 +397,7 @@ const handleKeyDown = (event) => {
               branding: false,
               skin: "borderless",
               menubar: true,
+             
               help_accessibility: false,
               resize:false,
               

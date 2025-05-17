@@ -130,6 +130,9 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
 .settingsPage{
     @media screen and (max-width: 640px) {
       margin: 0px auto;
+      top:150px;
+      height: fit-content;
+      
   
   }
 }
@@ -137,6 +140,67 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
    @media screen and (max-width: 450px) {
      width: 300px;
      font-size: 14px;
+  
+  }
+}
+.create-modal{
+   @media screen and (max-width: 640px) {
+  margin-top: 80px;
+    margin-right: 0px;
+    
+  
+  }
+}
+.editor-chat-cont{
+  @media screen and (max-width: 860px) {
+    flex-wrap: wrap;
+  
+  }
+}
+.text-editor{
+   @media screen and (max-width: 860px) {
+    width: 100%;
+  
+  }
+}
+.chat-cont{
+   @media screen and (max-width: 860px) {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    margin: 0px auto;
+    display: none;
+    
+  
+  }
+}
+.disp-block{
+  display: block;
+}
+.note-title{
+   @media screen and (max-width: 497px) {
+    width: fit-content;
+   display: flex;
+   flex-direction: column;
+   font-size: 16px;
+  }
+  @media screen and (max-width: 429px) {
+   
+    font-size: 14px;
+  }
+  @media screen and (max-width: 405px) {
+   
+    font-size: 12px;
+  }
+  @media screen and (max-width: 389px) {
+   
+    font-size: 10px;
+  }
+}
+.chat-btn{
+   @media screen and (max-width: 860px) {
+    display:inline-block
+    
   
   }
 }

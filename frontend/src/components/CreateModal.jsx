@@ -108,11 +108,11 @@ const CreateModal = () => {
 }
 
   return (
-    <div>
+    <div className="w-[100vw] border-2 h-full fixed  flex justify-center items-center z-10">
       <div
-        className={`fixed z-10 w-1/3 bg-white shadow-2xl rounded-lg ${
+        className={`fixed z-10 w-1/3 min-w-[350px] create-modal bg-white shadow-2xl rounded-lg ${
           wantNotification === true ? `${task==="notes"?("top-[25%]"):("top-[12%]")}` : `${task==="notes"?("top-[25%]"):("top-[18%]")}`
-        } right-[32%] border-2  border-neutral-500 px-8 py-4`}
+        }  mr-15 border-2  border-neutral-500 px-8 py-4`}
       >
         <label htmlFor="selectTasks" className="text-xl text-neutral-700 font-medium">
           Create:{" "}

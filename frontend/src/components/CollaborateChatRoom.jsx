@@ -161,7 +161,7 @@ const userPfp=useSelector(state=>state.user.pfp)
 
 
   return (
-    <div className="border-2 border-purple-300 rounded-[10px] max-w-[370px] min-w-[300px] mx-auto h-full">
+    <div className="border-2 bg-white border-purple-300 rounded-[10px] max-w-[370px] min-w-[300px] mx-auto h-full">
       <div className="bg-purple-500 flex items-center justify-between h-[2.8rem] p-2 rounded-t-md shadow-md shadow-gray-300 text-white">
         <div className="font-audiowide text-lg font-semibold">
           {roomName}
