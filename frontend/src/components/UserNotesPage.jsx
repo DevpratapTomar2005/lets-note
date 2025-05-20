@@ -6,7 +6,7 @@ function UserNotesPage() {
 
   return (
     
-      <div className="flex">
+      <div className="flex h-[100vh] bg-white" >
         <LeftSideBar/>
         <NotesPage/>
      

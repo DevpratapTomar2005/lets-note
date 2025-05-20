@@ -275,7 +275,7 @@ const handleKeyDown = (event) => {
   };
 
   return (
-    <div className="relative top-[2.74rem]">
+    <div className="relative top-[2.74rem] bg-white">
       <div className="flex justify-between items-center bg-white border-b-2 border-gray-200 py-1 px-3 h-13">
         <div className="text-gray-600 text-lg note-title"><span>Title:</span> <span>{note.title}</span></div>
         <div className="flex items-center gap-2">

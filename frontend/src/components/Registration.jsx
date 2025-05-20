@@ -6,7 +6,7 @@ import closeEye from "../assets/icons and logos/eye_close.svg"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isLoggedIn } from "../slices/loginSlice";
 import { userRegister } from "../services/apiCalls";
 import {toast} from 'react-toastify'
@@ -22,7 +22,7 @@ const Registration = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+const hamValue=useSelector(state=>state.ham.value)
   const {mutate,isPending}=useMutation({
     mutationFn: async (data)=>{
       return await userRegister({data})
@@ -48,11 +48,11 @@ const registerUser=(data)=>{
 }
 
   return (
-    <div className=" w-full pb-6 hero-gradient overflow-hidden flex flex-col items-center scroll-smooth">
+    <div className=" w-full pb-6 register-page hero-gradient overflow-hidden flex flex-col items-center scroll-smooth">
 
 
-    <div className="container border-3 border-white mx-auto w-3/4 mt-15 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500">
-      <div className="w-1/2 h-full flex  flex-col items-center justify-center  ">
+    <div className="container border-3 border-white register-cont mx-auto w-3/4 mt-15 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500">
+      <div className="w-1/2 h-full flex  flex-col register-cont-cred items-center justify-center  ">
         <span>
           <h1 className="font-roboto text-center text-white font-bold text-5xl mt-3">
             Signup
@@ -167,6 +167,15 @@ const registerUser=(data)=>{
             </button>
           </div>
         </div>
+      </div>
+          <div className={`bg-white p-3 absolute ${hamValue?"top-[55px] right-0 block transition-all duration-500 ease-in-out":"top-[-10%] hidden"}`}>
+        <ul className="text-purple-900 font-semibold font-roboto text-xl w-[200px]">
+          <li className="py-3 px-5"><Link to='/'>Home</Link></li>
+          <li className="py-3 px-5"><Link to='/about'>About Us</Link></li>
+          <li className="py-3 px-5"><Link to='/contact'>Contact</Link></li>
+          <li className="py-3 px-5"><Link to='/login'>Login</Link></li>
+          <li className="py-3 px-5"><Link to='/registration'>Sign Up</Link></li>
+        </ul>
       </div>
       <div className="signup-video-cont w-123 h-full flex items-center">
        <img src={signup} alt="signup img" />

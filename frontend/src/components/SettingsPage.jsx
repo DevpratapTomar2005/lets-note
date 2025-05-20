@@ -4,7 +4,7 @@ import Settings  from "./Settings.jsx";
 const SettingsPage = () => {
   return (
     
-      <div className="flex">
+      <div className="flex h-[100vh] bg-white">
         <LeftSideBar/>
         <Settings/>
      

@@ -4,6 +4,7 @@ import userReducer from '../slices/userSlice.js'
 import showCreateModalReducer from '../slices/showCreateModal.js'
 import showChatBotReducer from '../slices/showChatBotSlice.js'
 import joinedRoomReducer from '../slices/roomJoinSlice.js'
+import hamReducer from '../slices/hamSlice.js'
 export const store = configureStore({
   reducer: {
     login:loginReducer,
@@ -11,6 +12,6 @@ export const store = configureStore({
     showCreateModal:showCreateModalReducer,
     showChatBot:showChatBotReducer,
     joinedRoom:joinedRoomReducer,
-
+    ham:hamReducer
   },
 })

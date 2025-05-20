@@ -8,7 +8,7 @@ function UserHome() {
 
   return (
     
-      <div className="flex">
+      <div className="flex bg-white h-[100vh]">
         <LeftSideBar/>
         <Dashboard/>
      
