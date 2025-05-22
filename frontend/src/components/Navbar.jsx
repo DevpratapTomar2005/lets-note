@@ -4,7 +4,7 @@ import Avatar from 'react-avatar'
 import hamburger from "../assets/icons and logos/hamburger.svg"
 import { setHamNav } from "@/slices/hamSlice"
 import Cross from '../assets/icons and logos/cross.svg'
-
+import Logo from "../assets/icons and logos/logo.png"
 const Navbar = () => {
   const isLogged=useSelector((state)=>state.login.value)
   const user=useSelector(state=>state.user)
@@ -12,19 +12,19 @@ const Navbar = () => {
   const dispatch=useDispatch()
   return (
     <>
-    <nav className={(!isLogged)?("w-full flex bg-transparent text-white justify-between items-center px-4 py-2 absolute z-10"):("w-full flex bg-purple-600 text-white justify-between p-1 items-center fixed z-10")}>
+    <nav className={(!isLogged)?("w-full flex bg-transparent text-white justify-between items-center px-4 py-0 absolute z-10"):("w-full flex bg-purple-600 text-white justify-between p-1 items-center fixed z-10")}>
        {
         (!isLogged)?(
           <>
-          <div><NavLink to="/">LOGO</NavLink></div>
+          <div className="w-[100px] h-[100px] ml-5"><NavLink to="/"><img src={Logo} className="invert-100" alt="LetsNote" /></NavLink></div>
        
-          <ul className="flex gap-7 text-[17px] nav-links ml-15">
+          <ul className="flex justify-center items-center gap-7 text-[17px] nav-links ml-0">
               <li className="px-1 mx-1 hover:font-medium"><NavLink to="/">Home</NavLink></li>
               <li className="px-1 mx-1 hover:font-medium"><NavLink to="/about">About Us</NavLink></li>
               <li className="px-1 mx-1 hover:font-medium"><NavLink to="/contact">Contact</NavLink></li>
           </ul>
    
-            <div className="flex  auth-cont gap-3">
+            <div className="flex   auth-cont gap-3">
                 <button className="text-[17px] auth-text"><NavLink to="/login">Login</NavLink></button>
                 <button className="bg-white text-purple-800 hover:text-purple-600 text-[17px] auth-text font-semibold p-2 rounded-full"><NavLink to="/registration">Sign Up</NavLink></button>
                 <img src={!hamValue?(hamburger):(Cross)} onClick={()=>dispatch(setHamNav(!hamValue))} className={`hamburger ${!hamValue?(null):("p-2 rounded-full bg-purple-700 top-4")}`} alt="hamburger" />
@@ -32,7 +32,7 @@ const Navbar = () => {
           </>
         ):(
           <>
-          <div className="mx-10"><NavLink to="/">LOGO</NavLink></div>
+            <div className="mx-1 text-lg font-audiowide font-semibold"><NavLink to="/">LETSNOTE</NavLink></div>
 
 
           <div className="flex gap-1 bg-purple-800 rounded-md p-1 items-center cursor-pointer hover:bg-purple-400">

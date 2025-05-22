@@ -32,8 +32,8 @@ const Settings = () => {
       onError: async (error) => {
         
         if (error.response.status == 401) {
+          await refreshUserToken()
           try {
-            await refreshUserToken()
             logout();
           } catch (error) {
             dispatch(isLoggedIn(false))
@@ -59,8 +59,8 @@ const Settings = () => {
         },
         onError:async(error,formData)=>{
           if (error.response.status == 401) {
+            await refreshUserToken()
             try {
-              await refreshUserToken()
               uploadProfileImg(formData)
             } catch (error) {
               dispatch(isLoggedIn(false))

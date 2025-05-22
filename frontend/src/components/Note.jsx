@@ -22,8 +22,8 @@ const Note = ({note}) => {
     },
     onError:async(error,id)=>{
        if(error.response.status==401){
+         await refreshUserToken()
            try {
-             await refreshUserToken()
              deletingNote(id)
 
            } catch (error) {

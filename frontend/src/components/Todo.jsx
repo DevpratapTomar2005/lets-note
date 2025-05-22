@@ -23,8 +23,8 @@ const {mutate:completeTodo}=useMutation({
   },
   onError:async(error,id,completed)=>{
     if(error.response.status==401){
+      await refreshUserToken()
      try {
-       await refreshUserToken()
         completeTodo({id,completed})
        
        
@@ -58,8 +58,8 @@ const {mutate:completeTodo}=useMutation({
   },
   onError:async(error,id)=>{
     if (error.response.status == 401) {
+      await refreshUserToken()
           try {
-              await refreshUserToken()
                todoDeletion(id)
           } catch (error) {
             

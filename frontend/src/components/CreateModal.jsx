@@ -42,8 +42,8 @@ const CreateModal = () => {
         },
         onError:async(error,data)=>{
             if(error.status===401){
+              await refreshUserToken()
               try {
-                await refreshUserToken()
                 mutate(data)
               } catch (error) {
                 dispatch(isLoggedIn(false))
@@ -73,8 +73,8 @@ const CreateModal = () => {
       },
       onError:async(error,title)=>{
         if(error.status===401){
+          await refreshUserToken()
         try {
-            await refreshUserToken()
             creatingNote(title)
         } catch (error) {
           dispatch(isLoggedIn(false))

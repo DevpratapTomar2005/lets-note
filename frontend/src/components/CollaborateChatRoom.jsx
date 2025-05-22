@@ -2,14 +2,14 @@ import { useEffect,useState,useRef } from "react";
 import endCallImg from "../assets/icons and logos/endCall.svg"
 import { useDispatch,useSelector } from "react-redux";
 import { setJoinedRoom } from "../slices/roomJoinSlice.js";
-import Avatar from "react-avatar";
+
 const CollaborateChatRoom = ({ socketRef, roomID, roomName, userFullName }) => {
   const [senderMessage,setSenderMessage]=useState("")
     const buttonRef=useRef()
  const dispatch=useDispatch()
- console.log(roomName)
+
 const userPfp=useSelector(state=>state.user.pfp)
-  console.log("socketRef", socketRef.current)
+
 
   useEffect(() => {
     if (socketRef.current) {
@@ -66,13 +66,13 @@ const userPfp=useSelector(state=>state.user.pfp)
       
 
       socketRef.current.on("user-disconnected", (message, room,userFullNameRecieved) => {
-        console.log(message, room);
+        
           const messageCont=document.getElementById("messageCont")
         const lastChild = messageCont.lastElementChild;
 
 
       const isSameAsLast3 = lastChild?.textContent.trim() === message.trim() || lastChild?.textContent.trim() === `${userFullNameRecieved} joined the room`.trim();
-     console.log(isSameAsLast3)
+    
       if (isSameAsLast3){
        return;
         

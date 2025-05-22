@@ -48,9 +48,9 @@ const Login = () => {
   return (
     
       
-    <div className=" w-full hero-gradient login-page pb-6 overflow-hidden flex flex-col items-center scroll-smooth">
+    <div className=" w-full hero-gradient login-page pb-2 overflow-hidden flex flex-col items-center scroll-smooth">
      
-    <div className="container border-3 login-cont z-10 border-white mx-auto  w-3/4 mt-15 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500">
+    <div className="container border-3 login-cont z-10 border-white mx-auto  w-3/4 mt-19 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500">
       <div className="w-1/2 h-full flex login-cont-cred flex-col items-center justify-center  ">
         <span>
           <h1 className="font-roboto text-center text-white font-bold text-5xl mt-3">
@@ -137,13 +137,13 @@ const Login = () => {
           </div>
         </div>
       </div>
-        <div className={`bg-white p-3 absolute ${hamValue?"top-[55px] right-0 block transition-all duration-500 ease-in-out ":"top-[-10%] hidden"}`}>
+        <div className={`bg-white p-3 absolute border-2 shadow-sm shadow-gray-200 ${hamValue?"top-[79px] right-0 block transition-all duration-500 ease-in-out ":"top-[-10%] hidden"}`}>
         <ul className="text-purple-900 font-semibold font-roboto text-xl w-[200px]">
           <li className="py-3 px-5"><Link to='/'>Home</Link></li>
-          <li className="py-3 px-5"><Link to='/about'>About Us</Link></li>
-          <li className="py-3 px-5"><Link to='/contact'>Contact</Link></li>
-          <li className="py-3 px-5"><Link to='/login'>Login</Link></li>
-          <li className="py-3 px-5"><Link to='/registration'>Sign Up</Link></li>
+          <li className="py-3 px-5 border-t-1"><Link to='/about'>About Us</Link></li>
+          <li className="py-3 px-5 border-t-1"><Link to='/contact'>Contact</Link></li>
+          <li className="py-3 px-5 border-t-1"><Link to='/login'>Login</Link></li>
+          <li className="py-3 px-5 border-t-1"><Link to='/registration'>Sign Up</Link></li>
         </ul>
       </div>
       <div className="signup-video-cont w-123 h-full flex items-center">

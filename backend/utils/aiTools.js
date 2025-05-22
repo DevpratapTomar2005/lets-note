@@ -20,7 +20,13 @@ export const makeTodo=async(userId,title,dueDate,fcmToken,wantNotification,notif
     await user.save({validateBeforeSave:false})
     const savedTodo = user.todos[user.todos.length - 1];
     if(wantNotification && fcmToken){
-        const scheduledDate = new Date(`${dueDate} ${notificationTime}`)
+     const [hour, minute] = notificationTime.split(':').map(Number);  
+    const scheduledDate = new Date(dueDate)
+      scheduledDate.setHours(hour);
+      scheduledDate.setMinutes(minute);
+      scheduledDate.setSeconds(0);
+      scheduledDate.setMilliseconds(0);
+
         try {
             const job=schedule.scheduleJob(scheduledDate,async()=>{
                 

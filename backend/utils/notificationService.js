@@ -6,9 +6,11 @@ const sendNotifications=async(deviceToken,title,body)=>{
     const message={
         notification:{
             title:title,
-            body:body
+            body:body,
         },
-        token:deviceToken
+      
+     token:deviceToken
+        
     }
     try{
         return await admin.messaging(app).send(message)

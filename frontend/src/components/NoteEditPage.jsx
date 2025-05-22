@@ -55,8 +55,8 @@ const NoteEditPage = () => {
     },
     onError: async (error, id, content) => {
       if (error.status === 401) {
+        await refreshUserToken();
         try {
-          await refreshUserToken();
           editNote({ id, content });
         } catch (error) {
           dispatch(isLoggedIn(false));
@@ -91,8 +91,8 @@ const NoteEditPage = () => {
         onError: async (error) => {
           
           if (error.status === 401) {
+            await refreshUserToken();
             try {
-              await refreshUserToken();
               handleImageUpload(blobInfo, progress);
             } catch (error) {
               dispatch(isLoggedIn(false));
@@ -154,8 +154,8 @@ const NoteEditPage = () => {
        recievePrompt(error.response.data.message)
       }
       if(error.status===401){
+        await refreshUserToken()
       try {
-          await refreshUserToken()
           promptAiMutation({message,fcmToken})
       } catch (error) {
         dispatch(isLoggedIn(false))

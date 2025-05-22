@@ -67,8 +67,8 @@ function AiChatbot() {
          recievePrompt(error.response.data.message)
         }
         if(error.status===401){
+          await refreshUserToken()
         try {
-            await refreshUserToken()
             promptAiMutation({message,fcmToken})
         } catch (error) {
           dispatch(isLoggedIn(false))
