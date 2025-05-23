@@ -3,7 +3,7 @@ import google_logo from "../assets/icons and logos/google_logo.svg";
 import loadingDot from "../assets/icons and logos/loading dots.gif";
 import openEye from "../assets/icons and logos/eye_open.svg";
 import closeEye from "../assets/icons and logos/eye_close.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,8 @@ import { userLogin } from "../services/apiCalls";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { setUser } from "../slices/userSlice";
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Login = () => {
 
@@ -25,6 +26,9 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const hamValue=useSelector(state=>state.ham.value)
+  useEffect(()=>{
+    AOS.init()
+  },[])
   const {mutate,isPending}=useMutation({
     mutationFn:async(data)=>{
      return await userLogin({data})
@@ -50,8 +54,8 @@ const Login = () => {
       
     <div className=" w-full hero-gradient login-page pb-2 overflow-hidden flex flex-col items-center scroll-smooth">
      
-    <div className="container border-3 login-cont z-10 border-white mx-auto  w-3/4 mt-19 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500">
-      <div className="w-1/2 h-full flex login-cont-cred flex-col items-center justify-center  ">
+    <div className="container border-3 login-cont z-10 border-white mx-auto  w-3/4 mt-19 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500" data-aos="zoom-in" >
+      <div className="w-1/2 h-full flex login-cont-cred flex-col items-center justify-center">
         <span>
           <h1 className="font-roboto text-center text-white font-bold text-5xl mt-3">
             Login
@@ -128,16 +132,14 @@ const Login = () => {
               )}
             </button>
           </form>
-          <div className="text-sm text-center">Or</div>
-          <div className="flex justify-center my-1">
-            <button className="p-3 rounded border-2 border-white flex items-center gap-2 cursor-pointer">
-              <img src={google_logo} alt="google logo" className="size-6 invert" />
-              Continue With Google
-            </button>
-          </div>
         </div>
       </div>
-        <div className={`bg-white p-3 absolute border-2 shadow-sm shadow-gray-200 ${hamValue?"top-[79px] right-0 block transition-all duration-500 ease-in-out ":"top-[-10%] hidden"}`}>
+      <div className="signup-video-cont w-123 h-full flex items-center">
+       <img src={login} alt="login img" />
+      </div>
+      
+    </div>
+        <div className={`bg-white p-3 absolute border-2 shadow-sm z-11 shadow-gray-200 ${hamValue?"top-[79px] right-0 block transition-all duration-500 ease-in-out ":"top-[-10%] hidden"}`}>
         <ul className="text-purple-900 font-semibold font-roboto text-xl w-[200px]">
           <li className="py-3 px-5"><Link to='/'>Home</Link></li>
           <li className="py-3 px-5 border-t-1"><Link to='/about'>About Us</Link></li>
@@ -146,11 +148,6 @@ const Login = () => {
           <li className="py-3 px-5 border-t-1"><Link to='/registration'>Sign Up</Link></li>
         </ul>
       </div>
-      <div className="signup-video-cont w-123 h-full flex items-center">
-       <img src={login} alt="login img" />
-      </div>
-      
-    </div>
     
     </div>
     

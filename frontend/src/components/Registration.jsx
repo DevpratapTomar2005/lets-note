@@ -12,6 +12,9 @@ import { userRegister } from "../services/apiCalls";
 import {toast} from 'react-toastify'
 import { useMutation } from "@tanstack/react-query";
 import { setUser } from "../slices/userSlice";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { useEffect } from "react";
 const Registration = () => {
  
   const [show,setShow]=useState(false)
@@ -23,6 +26,9 @@ const Registration = () => {
     formState: { errors },
   } = useForm();
 const hamValue=useSelector(state=>state.ham.value)
+useEffect(()=>{
+  AOS.init()
+},[])
   const {mutate,isPending}=useMutation({
     mutationFn: async (data)=>{
       return await userRegister({data})
@@ -51,7 +57,7 @@ const registerUser=(data)=>{
     <div className=" w-full pb-2 register-page hero-gradient overflow-hidden flex flex-col items-center scroll-smooth">
 
 
-    <div className="container border-3 border-white register-cont mx-auto w-3/4 mt-19 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500">
+    <div className="container border-3 border-white register-cont mx-auto w-3/4 mt-19 h-[86vh] rounded-2xl flex justify-center items-center p-4 bg-[#1f0c22] shadow-lg shadow-purple-500" data-aos="zoom-in" >
       <div className="w-1/2 h-full flex  flex-col register-cont-cred items-center justify-center  ">
         <span>
           <h1 className="font-roboto text-center text-white font-bold text-5xl mt-3">
@@ -159,15 +165,12 @@ const registerUser=(data)=>{
               )}
             </button>
           </form>
-          <div className="text-sm text-center text-white">Or</div>
-          <div className="flex justify-center my-1">
-            <button className="p-3 rounded border-2 border-white text-white flex items-center gap-2 cursor-pointer">
-              <img src={google_logo} alt="google logo" className="size-6 invert" />
-              Continue With Google
-            </button>
-          </div>
-        </div>
+       </div>
       </div>
+      <div className="signup-video-cont w-123 h-full flex items-center">
+       <img src={signup} alt="signup img" />
+      </div>
+    </div>
         <div className={`bg-white p-3 absolute border-2 shadow-sm shadow-gray-200 ${hamValue?"top-[79px] right-0 block transition-all duration-500 ease-in-out ":"top-[-10%] hidden"}`}>
         <ul className="text-purple-900 font-semibold font-roboto text-xl w-[200px]">
           <li className="py-3 px-5"><Link to='/'>Home</Link></li>
@@ -177,10 +180,6 @@ const registerUser=(data)=>{
           <li className="py-3 px-5 border-t-1"><Link to='/registration'>Sign Up</Link></li>
         </ul>
       </div>
-      <div className="signup-video-cont w-123 h-full flex items-center">
-       <img src={signup} alt="signup img" />
-      </div>
-    </div>
     </div>
   );
 };

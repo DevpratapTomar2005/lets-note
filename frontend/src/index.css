@@ -227,7 +227,7 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
   overflow: visible;
  }
    @media screen and (max-width:950px){
-   overflow: visible;
+  
   }
 }
 .desp-cont{
@@ -330,7 +330,7 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
   }
   @media screen and (max-width:801px){
       font-size: 110px;
-     
+          
   }
   @media screen and (max-width:681px){
       font-size: 100px;
@@ -342,14 +342,15 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
   }
   @media screen and (max-width:529px){
       font-size: 80px;
+    margin-top: 170px;
      
   }
   @media screen and (max-width:498px){
-      font-size: 70px;
+      font-size: 60px;
      
   }
   @media screen and (max-width:438px){
-      font-size: 60px;
+      font-size: 50px;
      
   }
   @media screen and (max-width:382px){
@@ -409,6 +410,28 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
     @media screen and (max-width:385px){
     font-size: 14px;
   }
+}
+.loading-cont{
+  @media screen and (max-width:700px){
+    width:500px;
+    margin: 0px auto;
+  }
+  @media screen and (max-width:500px){
+    
+   width: 400px;
+    margin: 0px auto;
+  }
+  @media screen and (max-width:418px){
+    
+   width: 300px;
+    
+  }
+  @media screen and (max-width:406px){
+    
+   flex-direction: column;
+    gap:5px;
+  }
+
 }
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

@@ -28,7 +28,7 @@ const Contact = () => {
       </div>
     <div className="mt-25 absolute h-fit w-full">
       <div className="text-7xl text-center font-bold mt-2"><AuroraText colors={["#FF6EC7","#FEE440","#32FFE0","#A084E8","#FCA5F1","#5EEAD4","#F8FAFC"]}>Contact Us</AuroraText></div>
-      <div className="w-[80vw] border-4 shadow-md shadow-purple-500 p-5 about-cont-text mx-auto rounded-xl text-2xl flex flex-col gap-10 mt-8">
+      <div className="w-[80vw] border-4 shadow-md shadow-purple-500 p-5 about-cont-text mx-auto rounded-xl text-2xl flex flex-col gap-10 mt-8" data-aos="zoom-in" >
       <span>
         <h2 className="mb-3">Let’s Connect!</h2>
    Got a question, idea, or just want to say hi? I’d love to hear from you. Whether it's feedback, feature requests, or collaboration opportunities — feel free to reach out.
@@ -45,7 +45,7 @@ const Contact = () => {
             </span>
         </span>
       </div>
-       <div className="font-audiowide text-[13rem] letsnote-text text-[#a9a6a6] mt-10 text-center" data-aos="zoom-in-up" >
+       <div className="font-audiowide text-[13rem] letsnote-text text-[#a9a6a6] mt-10 text-center h-[20vh]" data-aos="zoom-in-up" >
         LETSNOTE
        </div>
     </div> 

@@ -67,7 +67,7 @@ function App() {
   return (
   
 loading?(
-  <div className="flex w-full h-[100vh] justify-center items-center bg-[#121212]">
+  <div className="flex w-full h-[100vh] justify-center loading-cont items-center bg-[#121212]">
     
     <img src={LoadingGif} className="w-[150px]" alt="Loading..." />
     <h1 className="font-audiowide text-5xl text-purple-300" >Loading...</h1>

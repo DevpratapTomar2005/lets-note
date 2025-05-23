@@ -108,7 +108,7 @@ const CreateModal = () => {
 }
 
   return (
-    <div className="w-[100vw] border-2 h-full fixed  flex justify-center items-center z-10">
+    <div className="w-[100vw] h-full fixed  flex justify-center items-center z-10">
       <div
         className={`fixed z-10 w-1/3 min-w-[350px] create-modal bg-white shadow-2xl rounded-lg ${
           wantNotification === true ? `${task==="notes"?("top-[25%]"):("top-[12%]")}` : `${task==="notes"?("top-[25%]"):("top-[18%]")}`
