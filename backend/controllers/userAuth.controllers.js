@@ -36,13 +36,13 @@ const userRegister = async (req, res) => {
       .cookie("current_session_token", accessToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .cookie("max_session_token", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .json({ message: "User registered successfully!",user:{fullname:user.fullname,email:user.email,pfp:user.pfpUrl} });
@@ -77,13 +77,13 @@ const userLogin = async (req, res) => {
       .cookie("current_session_token", accessToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .cookie("max_session_token", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .json({ message: "User logged in successfully!",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes,pfp:user.pfpUrl} });
@@ -100,12 +100,12 @@ const userLogout = async (req, res) => {
       .clearCookie("current_session_token", {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
       })
       .clearCookie("max_session_token", {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
       })
       .json({ message: "Logged out successfully!" });
   } catch (error) {
@@ -143,7 +143,7 @@ const refreshUserToken = async (req, res) => {
       .cookie("current_session_token", accessToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 
         
       })
@@ -154,12 +154,12 @@ const refreshUserToken = async (req, res) => {
         return res.status(401) .clearCookie("current_session_token", {
           httpOnly: true,
           secure: true,
-          sameSite: "Strict",
+          sameSite: "None",
         })
         .clearCookie("max_session_token", {
           httpOnly: true,
           secure: true,
-          sameSite: "Strict",
+          sameSite: "None",
         })
         .json({ message: "Token expired" });
     }
@@ -177,12 +177,12 @@ const persistUserNextVisit = async (req, res) => {
         .clearCookie("current_session_token", {
           httpOnly: true,
           secure: true,
-          sameSite: "Strict",
+          sameSite: "None",
         })
         .clearCookie("max_session_token", {
           httpOnly: true,
           secure: true,
-          sameSite: "Strict",
+          sameSite: "None",
         })
         .json({ message: "User Logged Out" });
     }
@@ -207,12 +207,12 @@ const persistUserNextVisit = async (req, res) => {
         .clearCookie("current_session_token", {
           httpOnly: true,
           secure: true,
-          sameSite: "Strict",
+          sameSite: "None",
         })
         .clearCookie("max_session_token", {
           httpOnly: true,
           secure: true,
-          sameSite: "Strict",
+          sameSite: "None",
         })
         .json({ message: "User Logged Out" });
     }
