@@ -8,7 +8,7 @@ const dbConnect=async ()=>{
      )
      console.log('DATABASE CONNECTED SUCCESSFULLY!!')
    } catch (error) {
-    
+    console.log(error)
     console.log('DATABASE CONNECTION FAILED!!')
     process.exit(1)
    }
