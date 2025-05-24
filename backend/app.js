@@ -24,7 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 //All routes
 app.use("/api/auth", userAuthRoutes);
 app.use("/api/user", userRoutes);
-
+app.get("/", (req, res) => {
+  res.json({status:"running",message:"Server is running"});
+})
 //Socket.io
 const rooms = {};
 io.on("connection", (socket) => {
