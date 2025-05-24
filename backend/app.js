@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
     }
     socket.leave(roomId)
     socket.disconnect()
-    console.log(socket.id, "disconnected")
+   
 
     socket
       .to(roomId)

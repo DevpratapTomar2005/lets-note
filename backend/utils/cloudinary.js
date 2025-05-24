@@ -19,7 +19,7 @@ export const uploadImage = async (localfilePath) => {
    } catch (error) {
    throw new Error("Cloudinary upload error:", error)
   
-    return null;
+ 
    }
   finally{
     fs.unlink(localfilePath, (err) => {
@@ -42,7 +42,6 @@ export const uploadPfpImage = async (localfilePath,id) => {
    } catch (error) {
    throw new Error("Cloudinary upload error:", error)
   
-    return null;
    }
   finally{
     fs.unlink(localfilePath, (err) => {

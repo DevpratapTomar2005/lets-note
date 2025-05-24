@@ -11,6 +11,7 @@ import {setPfp} from "../slices/userSlice"
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import editButton from "../assets/icons and logos/edit.svg"
+import LoadingDots from '../assets/icons and logos/loading dots.gif'
 import AiChatbot from "./AiChatbot";
 const Settings = () => {
     const showCreateModal = useSelector(state => state.showCreateModal.value)
@@ -20,7 +21,7 @@ const Settings = () => {
     
   
   
-    const { mutate:logout } = useMutation({
+    const { mutate:logout, isPending:logoutPending } = useMutation({
       mutationFn: async () => {
         return await userLogout();
       },
@@ -48,7 +49,7 @@ const Settings = () => {
       },
     });
 
-    const {mutate:uploadProfileImg}=useMutation({
+    const {mutate:uploadProfileImg ,isPending:pfpImgPending}=useMutation({
         mutationFn:async(formData)=>{
           return await uploadPfp(formData)
         }
@@ -98,8 +99,8 @@ const Settings = () => {
           }
         
         <label htmlFor="pfpInput">
-        <div className="absolute bg-purple-500 p-3 rounded-full text-white  z-10 bottom-4 right-0 shadow-md shadow-gray-400 cursor-pointer hover:bg-purple-400 hover:bottom-5 transition-all duration-150">
-          <img src={editButton} alt="edit"/>
+        <div className={`absolute bg-purple-500 ${pfpImgPending?("p-0"):("p-3")} w-[45px] h-[45px] rounded-full text-white  z-10 bottom-4 right-0 shadow-md shadow-gray-400 cursor-pointer hover:bg-purple-400 hover:bottom-5 transition-all duration-150`}>
+          <img src={pfpImgPending?(LoadingDots):(editButton)} alt="edit"/>
         </div>
         </label>
         <input type="file" id="pfpInput" className="hidden" onChange={(e)=>getPfp(e.target.files[0])} />
@@ -112,7 +113,9 @@ const Settings = () => {
             {user.email}
           </div>
         </div>
-      <div><button onClick={()=>logoutUser()} className="p-2 w-50 text-center rounded-md text-lg bg-purple-600 text-white hover:bg-purple-500">Logout</button></div>
+      <div><button onClick={()=>logoutUser()} className="p-2 w-50 text-center rounded-md text-lg bg-purple-600 text-white hover:bg-purple-500">{
+        logoutPending?("Logging Out..."):("Logout")
+        }</button></div>
       </div>
     </div>
     </div>

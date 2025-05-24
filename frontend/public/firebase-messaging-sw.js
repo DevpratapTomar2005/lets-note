@@ -14,7 +14,7 @@ importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compa
 
   const messaging = firebase.messaging();   
   messaging.onBackgroundMessage((payload)=>{
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
      

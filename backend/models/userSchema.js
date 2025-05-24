@@ -25,7 +25,8 @@ const userSchema=new mongoose.Schema({
     },
     notes:{
         type:[notesSchema],
-        default:[]
+        default:[],
+        
     },
     pfpUrl:{
         type:String,

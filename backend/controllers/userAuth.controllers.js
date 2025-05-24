@@ -37,13 +37,13 @@ const userRegister = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .cookie("max_session_token", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .json({ message: "User registered successfully!",user:{fullname:user.fullname,email:user.email,pfp:user.pfpUrl} });
   } catch (error) {
@@ -78,13 +78,13 @@ const userLogin = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .cookie("max_session_token", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 7 * 24 * 60 * 60 * 1000 
       })
       .json({ message: "User logged in successfully!",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes,pfp:user.pfpUrl} });
   } catch (error) {
@@ -133,7 +133,7 @@ const refreshUserToken = async (req, res) => {
       return res.status(400).json({ message: "Unauthorized user"  });
     }
     if (user.refreshToken !== refreshToken) {
-      console.log("Refresh token not matched!");
+      
       return res.status(400).json({ message: "Unauthorized user"  });
     }
 
@@ -144,7 +144,7 @@ const refreshUserToken = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 7 * 24 * 60 * 60 * 1000 
         
       })
       .json({ message: "Token refreshed successfully!" });
