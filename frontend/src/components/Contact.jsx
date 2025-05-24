@@ -3,7 +3,7 @@ import { Particles } from "@/components/magicui/particles";
 import Email from "../assets/icons and logos/email.svg"
 import Github from "../assets/icons and logos/github.svg"
 import Linkedin from "../assets/icons and logos/linkedin.svg"
-import Linksite from "../assets/icons and logos/Linksite.svg"
+import Linksite from "../assets/icons and logos/linksite.svg"
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import AOS from 'aos';
