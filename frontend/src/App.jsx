@@ -12,7 +12,7 @@ import { isLoggedIn } from "./slices/loginSlice";
 import { persistUserNextVisit, refreshUserToken } from "./services/apiCalls";
 import { useState,useEffect } from "react";
 import UserNotesPage from "./components/UserNotesPage.jsx";
-import UserTodosPage from "./components/userTodosPage.jsx";
+import UserTodosPage from "./components/UserTodosPage.jsx";
 import SettingsPage from "./components/SettingsPage.jsx";
 import { setUser } from "./slices/userSlice.js";
 import NoteEditPage from "./components/NoteEditPage.jsx";
