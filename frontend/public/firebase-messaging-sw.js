@@ -21,7 +21,7 @@ messaging.onBackgroundMessage(function (payload) {
 
   const notificationTitle = payload.notification?.title || 'Background Message';
   const notificationOptions = {
-    body: payload.notification?.body || 'You have a new message!',
+    body: payload.notification?.body
   
   };
 
