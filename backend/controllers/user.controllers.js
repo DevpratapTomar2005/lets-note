@@ -35,12 +35,10 @@ const createTodo=async(req,res)=>{
             const job=schedule.scheduleJob(scheduledDate,async()=>{
                 
               const response=  await sendNotifications(todoData.deviceToken,todoData.title,'You have a task due!!')
-              if(response){
-                user.deviceToken=todoData.deviceToken
-                await user.save({validateBeforeSave:false})
-              }
-             
+              
             });
+            user.deviceToken=todoData.deviceToken
+            await user.save({validateBeforeSave:false})
             
         } catch (error) {
             return res.status(500).json({message:'Notification not sent!'})
