@@ -49,6 +49,11 @@ const NoteEditPage = () => {
     }, delay);
   };
 }
+const sendUpdatedText = (content) => {
+  if (socketRef.current && roomID) {
+    socketRef.current.emit("send-updated-text", content, roomID);
+  }
+};
 const debouncedSendUpdatedText = useRef(debounce(sendUpdatedText, 300)).current;
   
   const { mutate: editNote, isPending: saving } = useMutation({
@@ -257,9 +262,7 @@ const debouncedSendUpdatedText = useRef(debounce(sendUpdatedText, 300)).current;
       dispatch(setJoinedRoom(true))
   };
 }
-const sendUpdatedText=(content)=>{
-  socketRef.current.emit("send-updated-text", content, roomID)
-}
+
 useEffect(()=>{
   
   if(socketRef.current && joinedRoom){
