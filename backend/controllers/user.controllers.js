@@ -7,7 +7,7 @@ import {makeTodo,todoDelete,completeTodo} from '../utils/aiTools.js'
 import { Type } from '@google/genai'
 const createTodo=async(req,res)=>{
     const {todoData}=req.body.todoData
-    
+    console.log(todoData)
    try {
      const user=await User.findById(req.user.id)
      if(!user){
@@ -26,11 +26,12 @@ const createTodo=async(req,res)=>{
     
     if(todoData.notifyMe && todoData.notificationTime && todoData.deviceToken){
     const [hour, minute] = todoData.notificationTime.split(':').map(Number);
-    const scheduledDate = new Date(todoData.dueDate);
-      scheduledDate.setHours(hour);
-      scheduledDate.setMinutes(minute);
-      scheduledDate.setSeconds(0);
-      scheduledDate.setMilliseconds(0);
+
+
+const [year, month, day] = todoData.dueDate.split('-').map(Number);
+
+const scheduledDate = new Date(year, month - 1, day, hour, minute, 0, 0);
+     
         try {
             const job=schedule.scheduleJob(scheduledDate,async()=>{
                 
@@ -39,7 +40,7 @@ const createTodo=async(req,res)=>{
             });
             user.deviceToken=todoData.deviceToken
             await user.save({validateBeforeSave:false})
-            
+           
         } catch (error) {
             return res.status(500).json({message:'Notification not sent!'})
         }

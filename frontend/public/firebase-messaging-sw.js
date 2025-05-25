@@ -1,4 +1,4 @@
-console.log('[SW] Service worker loaded');
+
 
 
 importScripts('https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js');
@@ -29,17 +29,5 @@ messaging.onBackgroundMessage(function (payload) {
 });
 
 
-self.addEventListener('push', (event) => {
-  console.log('[SW] Raw Push event received');
 
-  const data = event.data?.text() || 'No data payload';
-
-  const notificationTitle = 'Push Test';
-  const notificationOptions = {
-    body: data,
-    
-  };
-
-  event.waitUntil(self.registration.showNotification(notificationTitle, notificationOptions));
-});
 
