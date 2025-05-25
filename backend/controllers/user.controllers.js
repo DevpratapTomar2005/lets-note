@@ -39,7 +39,7 @@ const createTodo=async(req,res)=>{
                 user.deviceToken=todoData.deviceToken
                 await user.save({validateBeforeSave:false})
               }
-                console.log('Notification sent:', response);
+             
             });
             
         } catch (error) {

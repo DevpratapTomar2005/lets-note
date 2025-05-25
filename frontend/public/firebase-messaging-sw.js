@@ -1,7 +1,8 @@
-importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js');
+console.log('[SW] Service worker loaded');
 
 
+importScripts('https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js');
 
 
   firebase.initializeApp({apiKey: "AIzaSyDC7c7kY6C5BAivTVO7UWLrPiAFtaPz4sA",
@@ -12,16 +13,33 @@ importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compa
     appId: "1:25907335372:web:c47aa360b1f2f4dabdb269",
     measurementId: "G-PV2B946JGK"});
 
-  const messaging = firebase.messaging();   
-  messaging.onBackgroundMessage((payload)=>{
+ const messaging = firebase.messaging();
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-     
-      body: payload.data.body,
-      
-    };
-    self.registration.showNotification(notificationTitle, notificationOptions);
-  })
+
+messaging.onBackgroundMessage(function (payload) {
+  console.log('[SW] Firebase background message received:', payload);
+
+  const notificationTitle = payload.notification?.title || 'Background Message';
+  const notificationOptions = {
+    body: payload.notification?.body || 'You have a new message!',
   
-  
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+
+self.addEventListener('push', (event) => {
+  console.log('[SW] Raw Push event received');
+
+  const data = event.data?.text() || 'No data payload';
+
+  const notificationTitle = 'Push Test';
+  const notificationOptions = {
+    body: data,
+    
+  };
+
+  event.waitUntil(self.registration.showNotification(notificationTitle, notificationOptions));
+});
+
