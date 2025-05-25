@@ -43,10 +43,8 @@ const NoteEditPage = () => {
  
 const sendUpdatedText = (content) => {
 
-    setTimeout(()=>{
-
-      socketRef.current.emit("send-updated-text", content, roomID);
-    },300)
+  socketRef.current.emit("send-updated-text", content, roomID);
+    
   
 };
 
