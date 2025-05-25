@@ -18,16 +18,20 @@ const firebaseConfig = {
   const messaging = getMessaging(app);
 
   export const requestFCMToken=async()=>{
-    return Notification.requestPermission().then((permission)=>{    
-        if(permission==="granted"){
-            return getToken(messaging,{vapidKey:vapidKey})
-        }
-        else{
-            throw new Error('Permission denied')
-        }
-    }).catch((err)=>{
-        console.log('Error: ',err)
-    })
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      throw new Error("Permission denied");
+    }
+    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    const token = await getToken(messaging, {
+      vapidKey: vapidKey,
+      serviceWorkerRegistration: registration
+    });
+    return token;
+  } catch (err) {
+    console.log("Error:", err);
+  }
   }
 
   onMessage(messaging,(payload) => {
