@@ -35,15 +35,17 @@ const userRegister = async (req, res) => {
       .status(201)
       .cookie("current_session_token", accessToken, {
         httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000 
+        secure: true, 
+        sameSite: 'None', 
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .cookie("max_session_token", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000 
+         httpOnly: true,
+        secure: true, 
+        sameSite: 'None', 
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .json({ message: "User registered successfully!",user:{fullname:user.fullname,email:user.email,pfp:user.pfpUrl} });
   } catch (error) {
@@ -75,16 +77,18 @@ const userLogin = async (req, res) => {
     return res
       .status(201)
       .cookie("current_session_token", accessToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000 
+       httpOnly: true,
+        secure: true, 
+        sameSite: 'None', 
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .cookie("max_session_token", refreshToken, {
         httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000 
+        secure: true, 
+        sameSite: 'None', 
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .json({ message: "User logged in successfully!",user:{fullname:user.fullname,email:user.email,todos:user.todos,notes:user.notes,pfp:user.pfpUrl} });
   } catch (error) {
@@ -101,11 +105,13 @@ const userLogout = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "None",
+        path: '/'
       })
       .clearCookie("max_session_token", {
         httpOnly: true,
         secure: true,
         sameSite: "None",
+        path: '/'
       })
       .json({ message: "Logged out successfully!" });
   } catch (error) {
@@ -141,10 +147,11 @@ const refreshUserToken = async (req, res) => {
     return res
       .status(201)
       .cookie("current_session_token", accessToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000 
+         httpOnly: true,
+        secure: true, 
+        sameSite: 'None', 
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
         
       })
       .json({ message: "Token refreshed successfully!" });
@@ -155,11 +162,13 @@ const refreshUserToken = async (req, res) => {
           httpOnly: true,
           secure: true,
           sameSite: "None",
+          path: '/',
         })
         .clearCookie("max_session_token", {
           httpOnly: true,
           secure: true,
           sameSite: "None",
+          path: '/',
         })
         .json({ message: "Token expired" });
     }
@@ -178,11 +187,13 @@ const persistUserNextVisit = async (req, res) => {
           httpOnly: true,
           secure: true,
           sameSite: "None",
+          path: '/',
         })
         .clearCookie("max_session_token", {
           httpOnly: true,
           secure: true,
           sameSite: "None",
+          path: '/',
         })
         .json({ message: "User Logged Out" });
     }
@@ -208,11 +219,13 @@ const persistUserNextVisit = async (req, res) => {
           httpOnly: true,
           secure: true,
           sameSite: "None",
+          path: '/',
         })
         .clearCookie("max_session_token", {
           httpOnly: true,
           secure: true,
           sameSite: "None",
+          path: '/',
         })
         .json({ message: "User Logged Out" });
     }
