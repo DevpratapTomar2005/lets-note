@@ -261,10 +261,9 @@ useEffect(()=>{
   if(socketRef.current && joinedRoom){
 
     socketRef.current.on("receive-updated-text",(incomingContent)=>{
-      
-       if (incomingContent !== content) {
+    
         setContent(incomingContent);
-      }
+
 
       
     })
