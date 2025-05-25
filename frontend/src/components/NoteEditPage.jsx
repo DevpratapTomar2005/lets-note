@@ -40,21 +40,16 @@ const NoteEditPage = () => {
   const [showAiBox,setShowAiBox]=useState(false)
   const [prompt,setPrompt]=useState("")
   const socketRef = useRef(null)
-  function debounce(func, delay) {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-}
+ 
 const sendUpdatedText = (content) => {
-  if (socketRef.current && roomID) {
-    socketRef.current.emit("send-updated-text", content, roomID);
-  }
+
+    setTimeout(()=>{
+
+      socketRef.current.emit("send-updated-text", content, roomID);
+    },300)
+  
 };
-const debouncedSendUpdatedText = useRef(debounce(sendUpdatedText, 300)).current;
+
   
   const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
@@ -483,7 +478,7 @@ const handleKeyDown = (event) => {
             onEditorChange={(e) => {
               setContent(e)
               if(socketRef.current && joinedRoom) {
-               debouncedSendUpdatedText(e)
+             sendUpdatedText(e)
               }
             }}
           />
