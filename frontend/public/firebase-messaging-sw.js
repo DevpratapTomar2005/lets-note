@@ -17,7 +17,7 @@ importScripts('https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-comp
 
 
 messaging.onBackgroundMessage(function (payload) {
-  console.log('[SW] Firebase background message received:', payload);
+
 
   const notificationTitle = payload.notification?.title || 'Background Message';
   const notificationOptions = {
@@ -28,6 +28,17 @@ messaging.onBackgroundMessage(function (payload) {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
+self.addEventListener('push', (event) => {
+  const data = event.data?.json();
+  const { title, body } = data.notification;
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: body,
+    
+    })
+  );
+});
 
 
 
