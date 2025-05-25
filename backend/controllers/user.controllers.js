@@ -25,7 +25,12 @@ const createTodo=async(req,res)=>{
     const savedTodo = user.todos[user.todos.length - 1];
     
     if(todoData.notifyMe && todoData.notificationTime && todoData.deviceToken){
-        const scheduledDate = new Date(`${todoData.dueDate} ${todoData.notificationTime}`)
+    const [hour, minute] = todoData.notificationTime.split(':').map(Number);
+    const scheduledDate = new Date(todoData.dueDate);
+      scheduledDate.setHours(hour);
+      scheduledDate.setMinutes(minute);
+      scheduledDate.setSeconds(0);
+      scheduledDate.setMilliseconds(0);
         try {
             const job=schedule.scheduleJob(scheduledDate,async()=>{
                 
