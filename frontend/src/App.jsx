@@ -37,7 +37,7 @@ function App() {
 
       await refreshUserToken()
       try {
-         persistUserNextVisit()
+        checkPersistence()
       } catch (error) {
         dispatch(isLoggedIn(false));
         

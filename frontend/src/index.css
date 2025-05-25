@@ -83,7 +83,11 @@ background: linear-gradient(180deg,rgba(99, 14, 125, 1) 0%, rgba(99, 14, 125, 1)
     height: fit-content;
   }
 }
-
+.dashboard-page{
+  @media screen and (max-width: 874px) and ( min-width:664px) {
+  height: 100%;
+  }
+}
 .dashboard, .todoPage, .notesPage{
   @media screen and (max-width: 640px) {
    margin:0px auto;

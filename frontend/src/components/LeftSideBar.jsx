@@ -11,7 +11,7 @@ import { setShowChatBot } from '../slices/showChatBotSlice'
 const LeftSideBar = () => {
   const dispatch=useDispatch()
   return (
-    <div className="flex side-bar-mediaq flex-col  justify-between w-16 bg-white fixed shadow-right h-[calc(100vh-16px)] top-[2.74rem]">
+    <div className="flex side-bar-mediaq flex-col  justify-between w-16 bg-white fixed z-5 shadow-right h-[calc(100vh-16px)] top-[2.74rem]">
       <div className="top side-bar-content-mediaq flex flex-col gap-2 p-2">
       <div className="create bg-blue-500 p-3 rounded-lg hover:bg-blue-400" onClick={()=>dispatch(setShowCreateModal(true))}>
       <img className="m-auto w-[26px]" src={Plus} alt="create" />

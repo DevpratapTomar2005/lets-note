@@ -31,7 +31,11 @@ const userSchema=new mongoose.Schema({
     pfpUrl:{
         type:String,
         default:""
-    }
+    },
+    deviceToken:{
+        type:String,
+        default:""
+    },
 },{ timestamps:true })
 
 const User=mongoose.model("User",userSchema)

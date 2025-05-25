@@ -26,7 +26,7 @@ const Dashboard = () => {
   let currentMonth=new Date().getMonth()+1
   return (
     <>
-    <div className="h-[calc(90vh+16px)] bg-white relative w-full min-w-fit top-[2.74rem] ml-20 dashboard">
+    <div className="h-full bg-white relative w-full min-w-fit top-[2.74rem] ml-10 dashboard">
       {showCreateModal && <CreateModal />}
       <div className="upcoming-tasks my-12  mx-15">
         <div className="flex items-center upcoming-task-text">
@@ -52,7 +52,7 @@ const Dashboard = () => {
         
       </div>
       </div>
-      <div className="recent-notes my-7 mx-15">
+      <div className="recent-notes my-7 mx-15 bg-white">
         <div className="flex items-center recent-note-text">
           <span className="text-gray-500 font-roboto text-3xl">Recent Notes</span>
           

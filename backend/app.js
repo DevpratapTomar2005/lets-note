@@ -34,7 +34,7 @@ app.use("/api/user", userRoutes);
     users.forEach(user => {
       user.todos.forEach(todo => {
         if (!todo.completed) {
-          rescheduleNotification(todo);
+          rescheduleNotification(todo, user.deviceToken);
         }
       });
     });

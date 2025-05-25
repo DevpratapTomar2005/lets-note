@@ -35,7 +35,11 @@ const createTodo=async(req,res)=>{
             const job=schedule.scheduleJob(scheduledDate,async()=>{
                 
               const response=  await sendNotifications(todoData.deviceToken,todoData.title,'You have a task due!!')
-                
+              if(response){
+                user.deviceToken=todoData.deviceToken
+                await user.save({validateBeforeSave:false})
+              }
+                console.log('Notification sent:', response);
             });
             
         } catch (error) {
