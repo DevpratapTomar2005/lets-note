@@ -24,6 +24,7 @@ export const requestFCMToken = async () => {
       throw new Error("Permission denied");
     }
     const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    console.log("Service Worker registered:", registration);
     const token = await getToken(messaging, {
       vapidKey: vapidKey,
       serviceWorkerRegistration: registration
