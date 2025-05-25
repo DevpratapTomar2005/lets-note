@@ -35,8 +35,8 @@ function App() {
     onError:async(error)=>{
       if(error.status===401){
 
-      await refreshUserToken()
-      try {
+        try {
+        await refreshUserToken()
         checkPersistence()
       } catch (error) {
         dispatch(isLoggedIn(false));
