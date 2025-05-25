@@ -40,7 +40,8 @@ const scheduledDate = new Date(year, month - 1, day, hour, minute, 0, 0);
             });
             user.deviceToken=todoData.deviceToken
             await user.save({validateBeforeSave:false})
-           
+           console.log('Notification scheduled for:', scheduledDate);
+           console.log('Notification sent:', job);
         } catch (error) {
             return res.status(500).json({message:'Notification not sent!'})
         }
