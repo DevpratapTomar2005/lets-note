@@ -17,7 +17,7 @@ const firebaseConfig = {
 
   const messaging = getMessaging(app);
 
-  export const requestFCMToken=async()=>{
+export const requestFCMToken = async () => {
   try {
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
@@ -32,7 +32,7 @@ const firebaseConfig = {
   } catch (err) {
     console.log("Error:", err);
   }
-  }
+};
 
   onMessage(messaging,(payload) => {
     
