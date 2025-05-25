@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect,useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
@@ -23,6 +23,7 @@ import { setTodos,setTodoCompletion,deleteStoreTodo } from "../slices/userSlice.
 import chatGif from "../assets/illustrations/chatGif.gif"
 import aiLoading from '../assets/illustrations/aiLoading.gif'
 import Chat from "../assets/icons and logos/chat.svg"
+import { throttle } from 'lodash';
 const NoteEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,14 +41,15 @@ const NoteEditPage = () => {
   const [showAiBox,setShowAiBox]=useState(false)
   const [prompt,setPrompt]=useState("")
   const socketRef = useRef(null)
- 
-const sendUpdatedText = (content) => {
-
-  socketRef.current.emit("send-updated-text", content, roomID);
-    
-  
-};
-
+   const isUpdatingFromSocket = useRef(false);
+const throttledSendUpdatedText = useCallback(
+    throttle((content) => {
+      if (socketRef.current && joinedRoom && roomID) {
+        socketRef.current.emit("send-updated-text", content, roomID);
+      }
+    }, 100), 
+    [roomID, joinedRoom]
+  );
   
   const { mutate: editNote, isPending: saving } = useMutation({
     mutationFn: async ({ id, content }) => {
@@ -256,25 +258,37 @@ const sendUpdatedText = (content) => {
   };
 }
 
-useEffect(()=>{
-  
-  if(socketRef.current && joinedRoom){
-
-    socketRef.current.on("receive-updated-text",(incomingContent)=>{
+ const handleUpdatedText = useCallback((incomingContent) => {
     
-        setContent(incomingContent);
-
-
-      
-    })
-  }
-  return () => {
-    if(socketRef.current && joinedRoom) {
+    isUpdatingFromSocket.current = true;
+    setContent(incomingContent);
     
-      socketRef.current.off("receive-updated-text");
+    
+    setTimeout(() => {
+      isUpdatingFromSocket.current = false;
+    }, 50);
+  }, []);
+
+  useEffect(() => {
+    if (socketRef.current && joinedRoom) {
+      socketRef.current.on("receive-updated-text", handleUpdatedText);
+
+      return () => {
+        if (socketRef.current) {
+          socketRef.current.off("receive-updated-text", handleUpdatedText);
+        }
+      };
     }
-  };
-})
+  });
+
+  useEffect(() => {
+    return () => {
+      if (throttledSendUpdatedText.cancel) {
+        throttledSendUpdatedText.cancel();
+      }
+    };
+  }, [throttledSendUpdatedText]);
+
 const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       aiButtonRef.current.click(); 
@@ -398,7 +412,7 @@ const handleKeyDown = (event) => {
           <Editor
             apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
             value={content}
-      
+            
             init={{
               height: "100%",
               branding: false,
@@ -472,12 +486,13 @@ const handleKeyDown = (event) => {
                 input.click();
               },
             }}
-            onEditorChange={(e) => {
-              setContent(e)
-              if(socketRef.current && joinedRoom) {
-             sendUpdatedText(e)
-              }
-            }}
+           onEditorChange={(newContent) => {
+         
+          if (!isUpdatingFromSocket.current) {
+            setContent(newContent);
+            throttledSendUpdatedText(newContent);
+          }
+        }}
           />
         </div>
        
