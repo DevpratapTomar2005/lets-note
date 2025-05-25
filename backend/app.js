@@ -9,6 +9,8 @@ dotenv.config();
 const app = express();
 import http from "http";
 import { Server } from "socket.io";
+import { rescheduleNotification } from "./utils/rescheduleNotifications.js";
+import User from "./models/userSchema.js";
 const server = http.createServer(app);
 
 const io = new Server(server);
@@ -24,6 +26,24 @@ app.use(express.urlencoded({ extended: true }));
 //All routes
 app.use("/api/auth", userAuthRoutes);
 app.use("/api/user", userRoutes);
+
+//Rescheduling the notifications if server get restarted
+ try {
+    const users = await User.find({});
+
+    users.forEach(user => {
+      user.todos.forEach(todo => {
+        if (!todo.completed) {
+          rescheduleNotification(todo);
+        }
+      });
+    });
+
+    console.log("Rescheduled all todos on startup.");
+  } catch (error) {
+    console.error("Error during rescheduling todos:", error.message);
+  }
+
 app.get("/", (req, res) => {
   res.json({status:"running",message:"Server is running"});
 })
