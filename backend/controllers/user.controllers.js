@@ -4,7 +4,7 @@ import schedule from 'node-schedule'
 import {uploadImage,uploadPfpImage} from '../utils/cloudinary.js'
 import ai from '../utils/aiService.js'
 import {makeTodo,todoDelete,completeTodo} from '../utils/aiTools.js'
-import { Type } from '@google/genai'
+
 const createTodo=async(req,res)=>{
     const {todoData}=req.body.todoData
     
@@ -183,24 +183,23 @@ const uploadPfp=async(req,res)=>{
 const makeTodoDeclaration= {
     name: 'create_todo',
     description: "create a new todo and store it in a database with the given title, due Date ,  wantNotification(optional), notification time(if user wants notification). ",
-    parameters: {
-      type: Type.OBJECT,
+    parametersJsonSchema: {
+      type: 'object',
       properties: {
         title: {
-          type: Type.STRING,
-       
+          type: 'string',
           description: 'The title or task for which user wants to make a todo',
         },
         dueDate: {
-          type: Type.STRING,
+          type: 'string',
           description: "user may have provided DD/MM/YYYY or D/M/YY or DD-MM-YYYY or D-M-YY format date but convert it into ISO date format (eg, '2023-10-01T00:00:00Z').",
         },
         wantNotification: {
-          type: Type.BOOLEAN,
+          type: 'boolean',
           description: 'If user wants to schedule a todo or want notification of due task. if user have mentioned time or mentioned words similar to schedule or want notification then it will be true otherwise false and if the user have mentioned time but not want notification then ask for it',
         },
         notificationTime: {
-          type: Type.STRING,
+          type: 'string',
           description: 'The time of the notification in HH:MM format (eg, "14:30") user may have provided H:M format convert it to HH:MM format. if user wants notification or schedule but not mentioned time then ask for it and if user deny to want notification then do not ask',
         },
       },
@@ -211,11 +210,11 @@ const makeTodoDeclaration= {
 const deleteTodoDeclaration={
     name: 'delete_todo',
     description: "delete a todo from the database with the given title.",
-    parameters: {
-      type: Type.OBJECT,
+    parametersJsonSchema: {
+      type: 'object',
       properties: {
         title: {
-          type: Type.STRING,
+          type: 'string',
           description: 'The title of the todo to be deleted.',
         },
       },
@@ -226,15 +225,15 @@ const deleteTodoDeclaration={
   const completeTodoDeclaration={
     name: 'complete_todo',
     description: "mark a todo as completed in the database with the given title.",
-    parameters: {
-      type: Type.OBJECT,
+    parametersJsonSchema: {
+      type: 'object',
       properties: {
         title: {
-          type: Type.STRING,
+          type: 'string',
           description: 'The title of the todo to be marked as completed.',
         },
         completed:{
-            type:Type.BOOLEAN,
+            type: 'boolean',
             description:'If user have mentioned completed or not then it will be true otherwise false'
         }
       },
@@ -242,8 +241,23 @@ const deleteTodoDeclaration={
     },
   }
 
-const systemPrompt='You are an ai assistant for a web app which helps user in writting content, helping them in managing todos by providing the functionality of creating deleting and set the todo completion status with the help of tools provided to you. you will be provided with a message and you have to respond with a message in the same language. you have to respond in the same language as the message is in. You will generate the content normally but when user asks to create, delete or set complete status of todos then only you will call the tools.'
-let chatHistory=[{role:'user',parts:[{text:systemPrompt}]}];
+const stripMarkdown=(text)=>{
+    return text
+        .replace(/#{1,6}\s+/gm, '')
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/\*(.+?)\*/g, '$1')
+        .replace(/\_\_(.+?)\_\_/g, '$1')
+        .replace(/\_(.+?)\_/g, '$1')
+        .replace(/`{1,3}[^`\n]*`{1,3}/g, '')
+        .replace(/^\s*[-*+]\s+/gm, '')
+        .replace(/^\s*\d+\.\s+/gm, '')
+        .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim()
+}
+
+const systemPrompt='You are an ai assistant for a web app which helps user in writting content, helping them in managing todos by providing the functionality of creating deleting and set the todo completion status with the help of tools provided to you. you will be provided with a message and you have to respond with a message in the same language. you have to respond in the same language as the message is in. You will generate the content normally but when user asks to create, delete or set complete status of todos then only you will call the tools. Always respond in plain text only. Do not use any markdown formatting — no asterisks, no hashes, no backticks, no dashes for bullets, no bold, no italics, no code blocks. Structure your response using only newlines: a heading or title goes on its own line followed by two empty lines, each paragraph goes on its own line, and separate paragraphs with a single empty line. Example format: Heading\n\nFirst paragraph text here.\n\nSecond paragraph text here.'
+let chatHistory=[];
 
 const aiAgent=async(req,res)=>{
     const {message,fcmToken}=req.body
@@ -255,7 +269,7 @@ const aiAgent=async(req,res)=>{
             model: 'gemini-2.5-flash',
             contents: chatHistory,
             config:{
-
+                systemInstruction: systemPrompt,
                 tools: [{
                     functionDeclarations: [makeTodoDeclaration,deleteTodoDeclaration,completeTodoDeclaration],
                   }],
@@ -263,28 +277,29 @@ const aiAgent=async(req,res)=>{
             }
             
           });
-          const aiResponse=response.candidates[0].content.parts[0]
+          
     
-    
-          if(aiResponse.text){
-            chatHistory.push({role:'assistant',parts:[{ text:aiResponse.text }]})
-            return res.status(200).json({message:aiResponse.text})
+          if(response.text){
+            const cleanText=stripMarkdown(response.text)
+            chatHistory.push({role:'model',parts:[{ text:cleanText }]})
+            return res.status(200).json({message:cleanText})
            
           }
-          else if(aiResponse.functionCall){
-              chatHistory.push({role:'assistant',parts:[{ functionCall:aiResponse.functionCall }]})
+          else if(response.functionCalls && response.functionCalls.length > 0){
+              const functionCall = response.functionCalls[0]
+              chatHistory.push({role:'model',parts:[{ functionCall }]})
               
               let functionsReturnObj={
-                functionName:aiResponse.functionCall.name,
+                functionName:functionCall.name,
                 message:'',
                 errorMsg:'',
                 todoId:'',
                 completed:false,
                 todo:{}
               }
-            if(response.candidates[0].content.parts[0].functionCall && response.candidates[0].content.parts[0].functionCall.name==="create_todo"){
+            if(functionCall.name==="create_todo"){
     
-                const {message,errorMsg,todo}=await makeTodo(req.user.id,response.candidates[0].content.parts[0].functionCall.args.title,response.candidates[0].content.parts[0].functionCall.args.dueDate,fcmToken,response.candidates[0].content.parts[0].functionCall.args.wantNotification,response.candidates[0].content.parts[0].functionCall.args.notificationTime)
+                const {message,errorMsg,todo}=await makeTodo(req.user.id,functionCall.args.title,functionCall.args.dueDate,fcmToken,functionCall.args.wantNotification,functionCall.args.notificationTime)
                 if(message && !errorMsg){
                   functionsReturnObj.message=message,
                   functionsReturnObj.todo=todo
@@ -294,8 +309,8 @@ const aiAgent=async(req,res)=>{
                 }
             }
     
-             if(response.candidates[0].content.parts[0].functionCall && response.candidates[0].content.parts[0].functionCall.name==="delete_todo"){
-              const {message,errorMsg,todoId}=await todoDelete(req.user.id,response.candidates[0].content.parts[0].functionCall.args.title)
+             if(functionCall.name==="delete_todo"){
+              const {message,errorMsg,todoId}=await todoDelete(req.user.id,functionCall.args.title)
              
               if(message && !errorMsg){
                 functionsReturnObj.message=message,
@@ -306,8 +321,8 @@ const aiAgent=async(req,res)=>{
               }
             }
     
-            if(response.candidates[0].content.parts[0].functionCall && response.candidates[0].content.parts[0].functionCall.name==="complete_todo"){
-              const {message,errorMsg,todoId,completed}=await completeTodo(req.user.id,response.candidates[0].content.parts[0].functionCall.args.title,response.candidates[0].content.parts[0].functionCall.args.completed)
+            if(functionCall.name==="complete_todo"){
+              const {message,errorMsg,todoId,completed}=await completeTodo(req.user.id,functionCall.args.title,functionCall.args.completed)
               if(message && !errorMsg){
                 functionsReturnObj.message=message,
                 functionsReturnObj.todoId=todoId,
@@ -322,13 +337,13 @@ const aiAgent=async(req,res)=>{
             
           }
           else{
-            chatHistory.push({role:'assistant',parts:[{ text:'Unable to process your request' }]})
+            chatHistory.push({role:'model',parts:[{ text:'Unable to process your request' }]})
             return res.status(400).json({message:'Unable to process your request'})
           }
           
          
     } catch (error) {
-        chatHistory.push({role:'assistant',parts:[{ text:'Something went wrong!' }]})
+        chatHistory.push({role:'model',parts:[{ text:'Something went wrong!' }]})
         return res.status(500).json({message:'Something went wrong!'})
         
     }
