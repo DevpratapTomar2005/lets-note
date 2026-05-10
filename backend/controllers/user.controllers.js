@@ -343,6 +343,7 @@ const aiAgent=async(req,res)=>{
           
          
     } catch (error) {
+      console.log(error)
         chatHistory.push({role:'model',parts:[{ text:'Something went wrong!' }]})
         return res.status(500).json({message:'Something went wrong!'})
         
